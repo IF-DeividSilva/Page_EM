@@ -5,9 +5,9 @@ import { CommonModule } from '@angular/common';
   selector: 'app-home',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './home.html',
-  styleUrls: ['./home.css']
+  template: `
+    <h1>Bem-vindo ao EcoMuseu</h1>
+    <p>Esta é a página inicial do EcoMuseu.</p>
+  `
 })
-export class HomeComponent {
-  // seu código aqui
-}
+export class HomeComponent {}

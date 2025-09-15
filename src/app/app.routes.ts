@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './home/home';  // Note que mudamos de .component para apenas .ts
+import { HomeComponent } from './home/home';
 
 export const routes: Routes = [
   {

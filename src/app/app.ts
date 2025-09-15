@@ -6,8 +6,9 @@ import { HomeComponent } from './home/home';
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, HomeComponent],
-  templateUrl: './app.html',
-  styleUrls: ['./app.css']
+  template: `
+    <router-outlet></router-outlet>
+  `
 })
 export class AppComponent {
   title = 'EcoMuseu';
