@@ -8,7 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:EcoMuseu": "node dist/EcoMuseu/server/server.mjs",
-    "deploy": "ng build --configuration production --base-href=/Page_EcoMuseu/"
+    "deploy": "ng build --configuration production --base-href=/Page_EcoMuseu/ --deploy-url /Page_EcoMuseu/"
   },
   "prettier": {
     "printWidth": 100,
