@@ -2,7 +2,7 @@
 export default {
   bootstrap: () => import('./main.server.mjs').then(m => m.default),
   inlineCriticalCss: true,
-  baseHref: 'https://if-deividsilva.github.io/Page_EcoMuseu/',
+  baseHref: '/Page_EcoMuseu/',
   locale: undefined,
   routes: [
   {
@@ -21,10 +21,10 @@ export default {
 ],
   entryPointToBrowserMapping: undefined,
   assets: {
-    'index.csr.html': {size: 479, hash: '2f092ba2955189edcbe72af66f14e598cfd4e9f85fff46e1879c8d7b06fa80a9', text: () => import('./assets-chunks/index_csr_html.mjs').then(m => m.default)},
-    'index.server.html': {size: 992, hash: '3bfcb4361f9ad65285d0450648cb9ee77f4fb6005d103271cee1ee323cc3cadc', text: () => import('./assets-chunks/index_server_html.mjs').then(m => m.default)},
-    'home-component/index.html': {size: 1884, hash: 'e0377b0ababd82317908df342171962611b838e07d100ba29ef4bcd958086e23', text: () => import('./assets-chunks/home-component_index_html.mjs').then(m => m.default)},
-    'pagina1-component/index.html': {size: 1045, hash: '3a9ba8174b2420d23b631069e8353e7171f953c4311697c0bdb3ed9a057be17a', text: () => import('./assets-chunks/pagina1-component_index_html.mjs').then(m => m.default)},
+    'index.csr.html': {size: 447, hash: 'c808551dbf13ab850800c32e2a7233f609849e3f90697a2b56876489e3256461', text: () => import('./assets-chunks/index_csr_html.mjs').then(m => m.default)},
+    'index.server.html': {size: 960, hash: 'f1337436784ffd36663976a586e1b14f045c80c44a3fd68af7bc733ad21e54ef', text: () => import('./assets-chunks/index_server_html.mjs').then(m => m.default)},
+    'home-component/index.html': {size: 1918, hash: '7d2a7a2c308d401ec43708939ce57765688a213f0b93f26a99a59bd60b0fa09e', text: () => import('./assets-chunks/home-component_index_html.mjs').then(m => m.default)},
+    'pagina1-component/index.html': {size: 1705, hash: '09c7908678cee7b1a29b3c1643c83c1bb1e76b80b81c8ab9f55a697b8f052775', text: () => import('./assets-chunks/pagina1-component_index_html.mjs').then(m => m.default)},
     'styles-5INURTSO.css': {size: 0, hash: 'menYUTfbRu8', text: () => import('./assets-chunks/styles-5INURTSO_css.mjs').then(m => m.default)}
   },
 };

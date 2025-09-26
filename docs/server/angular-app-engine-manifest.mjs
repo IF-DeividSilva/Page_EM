@@ -1,6 +1,6 @@
 
 export default {
-  basePath: 'https://if-deividsilva.github.io/Page_EcoMuseu',
+  basePath: '/Page_EcoMuseu',
   supportedLocales: {
   "en-US": ""
 },

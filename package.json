@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --base-href /Page_EcoMuseu/ --output-path docs",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:museu-app": "node dist/museu-app/server/server.mjs"
