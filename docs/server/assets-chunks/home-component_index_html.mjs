@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-beasties-container><head>
+export default `<!DOCTYPE html><html lang="en" data-beasties-container><head>
   <meta charset="utf-8">
   <title>HomePage</title>
   <base href="https://if-deividsilva.github.io/Page_EcoMuseu/">
@@ -10,4 +10,4 @@
   <app-root ng-version="20.3.0" ngh="1" ng-server-context="ssg"><main role="main" aria-label="Main Content" class="main"><header><h1>Museu do Boné (v.1.3)</h1><p>Acessibilidade para Todos.</p></header><router-outlet></router-outlet><app-home-component ngh="0"><p></p><div class="container"><button type="button" routerlink="pagina1-component" class="btn waves-effect waves-light cyan darken-2" tabindex="0" jsaction="click:;"><i class="material-icons my-icon-size">drive_eta</i>pagina1-component</button></div></app-home-component><!----><nav class="nav-extended"><div class="nav-wrapper cyan"><a href="pagina1-component" class="brand-logo"><h6>Link</h6></a></div></nav></main></app-root>
 <script src="main-UUACAITE.js" type="module"></script>
 
-<script id="ng-state" type="application/json">{"__nghData__":[{},{"c":{"6":[{"i":"c2948948958","r":1}]}}]}</script></body></html>
+<script id="ng-state" type="application/json">{"__nghData__":[{},{"c":{"6":[{"i":"c2948948958","r":1}]}}]}</script></body></html>`;
