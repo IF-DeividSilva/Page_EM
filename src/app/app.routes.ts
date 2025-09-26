@@ -1,13 +1,13 @@
 import { Routes } from '@angular/router';
 
-import { Pagina1Component } from './pagina1-component/pagina1-component';
-import { HomeComponent } from './home-component/home-component';
+
+import { Pagina1Component } from '../app/pagina1-component/pagina1-component';
+import { LandPageComponent } from './land-page-component/land-page-component';
+
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'home-component', pathMatch: 'full' },
-  { path: 'home-component', component: HomeComponent, title: 'HomePage' },
-  { path: 'pagina1-component', component: Pagina1Component, title: 'Pagina 1' }
+   {path:'', component: LandPageComponent},
+   {path: 'museu/pagina1-component', component: Pagina1Component}
 ];
-
 
 export default routes;

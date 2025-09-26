@@ -1,6 +1,3 @@
-//Set-ExecutionPolicy Bypass -Scope Process
-
-
 import { bootstrapApplication, provideProtractorTestingSupport } from '@angular/platform-browser';
 import { App } from './app/app';
 import {provideRouter} from '@angular/router';

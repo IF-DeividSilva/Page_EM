@@ -1,7 +1,6 @@
 {
   "routes": {
     "/Page_EcoMuseu": {},
-    "/Page_EcoMuseu/home-component": {},
-    "/Page_EcoMuseu/pagina1-component": {}
+    "/Page_EcoMuseu/museu/pagina1-component": {}
   }
 }

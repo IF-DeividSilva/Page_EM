@@ -3,12 +3,12 @@ export default `<!doctype html>
 <head>
   <meta charset="utf-8">
   <title>MuseuApp</title>
-  <base href="/Page_EcoMuseu/">
+  <base href="https://if-deividsilva.github.io/Page_EcoMuseu/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="stylesheet" href="styles-5INURTSO.css"></head>
 <body ngcm="">
   <app-root></app-root>
-<script src="main-CBTOQQZ3.js" type="module"></script></body>
+<script src="main-CEXKYU4K.js" type="module"></script></body>
 </html>
 `;
