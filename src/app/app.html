@@ -1,14 +1,15 @@
 <header>
   <div class="brand">
     <a routerLink="/">
-  <img src="assets/logo-ecomuseu.png" alt="Ir para a página inicial do Ecomuseu do Boné" class="logo">
-</a>
-
+    </a>
+    <img src="assets/logo-ecomuseu.png" alt="Ir para a página inicial do Ecomuseu do Boné" class="logo">
+    
     <h1>Ecomuseu do Boné</h1>
   </div>
   <nav>
-    <ul>
-      <li><a routerLink="/sobre">Sobre</a></li>
+     <a href="/" class="brand-logo"> <img src="assets/logo-ecomuseu.png" alt="Ir para a página inicial do Ecomuseu do Boné" class="logo"></a>
+     <ul id="nav-mobile" class="right hide-on-med-and-down">
+      <li><a routerLink="/pagina1-component" routerLinkActive="active">Sobre</a></li>
       <li><a routerLink="/acervo">Acervo</a></li>
       <li><a routerLink="/eventos">Eventos</a></li>
       <li><a routerLink="/visita">Visite-nos</a></li>
@@ -18,4 +19,5 @@
 </header>
 
 
-<router-outlet /> 
+<router-outlet></router-outlet>
+
