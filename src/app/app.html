@@ -1,23 +1,31 @@
-<header>
-  <div class="brand">
-    <a routerLink="/">
-    </a>
-    <img src="assets/logo-ecomuseu.png" alt="Ir para a página inicial do Ecomuseu do Boné" class="logo">
+<nav class="seu-cor-de-fundo"> <div class="nav-wrapper container">
     
-    <h1>Ecomuseu do Boné</h1>
-  </div>
-  <nav>
-     <a href="/" class="brand-logo"> <img src="assets/logo-ecomuseu.png" alt="Ir para a página inicial do Ecomuseu do Boné" class="logo"></a>
-     <ul id="nav-mobile" class="right hide-on-med-and-down">
+    <a routerLink="/" class="brand-logo">
+      <img src="assets/logo-ecomuseu.png" alt="Logo do Ecomuseu do Boné" class="logo responsive-img" style="height: 50px; margin-top: 8px;">
+      <span class="hide-on-med-and-down" style="vertical-align: top; margin-left: 15px; font-size: 1.8rem;">Ecomuseu do Boné</span>
+    </a>
+
+    <a href="#" data-target="mobile-nav" class="sidenav-trigger">
+      <i class="material-icons">menu</i>
+    </a>
+
+    <ul class="right hide-on-med-and-down">
       <li><a routerLink="/pagina1-component" routerLinkActive="active">Sobre</a></li>
       <li><a routerLink="/acervo">Acervo</a></li>
       <li><a routerLink="/eventos">Eventos</a></li>
       <li><a routerLink="/visita">Visite-nos</a></li>
       <li><a routerLink="/contato">Contato</a></li>
     </ul>
-  </nav>
-</header>
 
+  </div>
+</nav>
+
+<ul class="sidenav" id="mobile-nav">
+  <li><a routerLink="/pagina1-component" routerLinkActive="active">Sobre</a></li>
+  <li><a routerLink="/acervo">Acervo</a></li>
+  <li><a routerLink="/eventos">Eventos</a></li>
+  <li><a routerLink="/visita">Visite-nos</a></li>
+  <li><a routerLink="/contato">Contato</a></li>
+</ul>
 
 <router-outlet></router-outlet>
-
