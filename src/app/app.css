@@ -16,3 +16,15 @@
   }
 }
 
+/* Ajustes para mobile */
+@media (max-width: 992px) {
+  .brand-logo {
+    left: 0 !important;
+    transform: none !important;
+  }
+  
+  .brand-logo img {
+    height: 40px !important;
+    margin-top: 12px;
+  }
+}

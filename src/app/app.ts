@@ -52,27 +52,38 @@ export class App {
   }
 
   private initSidenav() {
-    const waitForM = setInterval(() => {
-      if (typeof M !== 'undefined') {
-        clearInterval(waitForM);
+  const waitForM = setInterval(() => {
+    if (typeof M !== 'undefined') {
+      clearInterval(waitForM);
+      
+      const sidenavElement = document.querySelector('.sidenav');
+      const trigger = document.querySelector('.sidenav-trigger');
+      
+      if (sidenavElement) {
+        this.sidenavInstance = M.Sidenav.init(sidenavElement, {
+          edge: 'right',
+          draggable: true,
+          onOpenStart: () => {
+            const firstLink = sidenavElement.querySelector('a');
+            setTimeout(() => (firstLink as HTMLElement)?.focus(), 100);
+          }
+        });
         
-        const sidenavElement = document.querySelector('.sidenav');
-        
-        if (sidenavElement) {
-          this.sidenavInstance = M.Sidenav.init(sidenavElement, {
-            edge: 'left',
-            draggable: true,
-            onOpenStart: () => {
-              const firstLink = sidenavElement.querySelector('a');
-              setTimeout(() => (firstLink as HTMLElement)?.focus(), 100);
+        // Adiciona listener manual no botão
+        if (trigger) {
+          trigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (this.sidenavInstance) {
+              this.sidenavInstance.open();
             }
           });
-          
-          console.log('Sidenav OK');
         }
+        
+        console.log('Sidenav OK');
       }
-    }, 100);
-    
-    setTimeout(() => clearInterval(waitForM), 5000);
-  }
+    }
+  }, 100);
+  
+  setTimeout(() => clearInterval(waitForM), 5000);
+}
 }

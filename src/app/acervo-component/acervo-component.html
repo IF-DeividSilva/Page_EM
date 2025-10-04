@@ -2,10 +2,18 @@
      alt="Fotografia de uma fábrica de bonés, mostrando um jovem trabalhador sorrindo em primeiro plano, manuseando uma pilha de bonés brancos, com outras máquinas e funcionários ao fundo." 
      tabindex="0"
      style="width: 100%; max-width: 800px; height: auto; display: block; margin: 0 auto;">
+
+<button class="btn waves-effect" (click)="toggleAudio()" aria-label="Reproduzir ou pausar áudio">
+  <i class="material-icons left">{{ isPlaying ? 'pause_circle_filled' : 'play_circle_filled' }}</i>
+  {{ isPlaying ? 'Pausar' : 'Ouvir' }}
+</button>
+
+<audio #player src="https://raw.githubusercontent.com/IF-DeividSilva/ext_program/main/audio_descricao_foto1.wav"></audio>
+
 <h2 tabindex="0" style="text-align: center; margin-top: 20px;">Setor de confecção de bonés tem pequeno aquecimento</h2>
 <p tabindex="0" style="text-align: center; max-width: 800px; margin: 10px auto;">
  Setor de confecção de bonés tem pequeno aquecimento
-Elias Rodrigues — Editoria Local
+Eldir Rodrigues — Editoria Local
 
 A proximidade das campanhas eleitorais deste ano deve provocar certo aquecimento no setor de confecções de bonés em Apucarana. Algumas confecções de Apucarana já começam a sentir o reflexo do aumento de pedidos. Só em uma empresa do setor foram feitos cerca de 150 mil bonés destinados a atender a demanda das campanhas eleitorais deste ano.
 
