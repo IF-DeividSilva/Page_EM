@@ -1,6 +1,6 @@
-import { Component, signal, AfterViewInit } from '@angular/core';
+import { Component, signal, PLATFORM_ID, inject, afterNextRender } from '@angular/core';
 import { RouterOutlet, RouterLink } from '@angular/router';
-import * as M from 'materialize-css';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -9,12 +9,43 @@ import * as M from 'materialize-css';
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App implements AfterViewInit {
+export class App {
   protected readonly title = signal('museu-app');
+  private platformId = inject(PLATFORM_ID);
 
-  ngAfterViewInit() {
-    // Inicializa o Sidenav
-    const sidenavs = document.querySelectorAll('.sidenav');
-    M.Sidenav.init(sidenavs, {});
+  constructor() {
+    afterNextRender(() => {
+      if (isPlatformBrowser(this.platformId)) {
+        this.initSidenav();
+      }
+    });
+  }
+
+  private async initSidenav() {
+    try {
+      const M = await import('materialize-css');
+      const sidenavElement = document.querySelector('.sidenav');
+      
+      if (sidenavElement) {
+        const instance = M.Sidenav.init(sidenavElement, {
+          edge: 'left',
+          draggable: true
+        });
+        
+        // Event listener para o botão
+        const trigger = document.querySelector('.sidenav-trigger');
+        if (trigger) {
+          trigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            instance.open();
+          });
+        }
+        
+        console.log(' Sidenav funcionando!');
+      }
+    } catch (error) {
+      console.error(' Erro ao inicializar sidenav:', error);
+    }
   }
 }
