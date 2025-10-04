@@ -1,33 +1,33 @@
 <nav class="orange lighten-4">
   <div class="nav-wrapper container">
-    <a routerLink="/" class="brand-logo">
+    <a routerLink="/" class="brand-logo" tabindex="1">
       <img src="assets/logo-ecomuseu.png" alt="Logo do Ecomuseu do Boné" class="logo responsive-img" style="height: 50px; margin-top: 8px;">
       <span class="hide-on-med-and-down" style="vertical-align: top; margin-left: 15px; font-size: 1.8rem; color: black;">Ecomuseu do Boné</span>
     </a>
 
     <!-- Botão hamburguer para mobile -->
-    <a href="#" data-target="mobile-nav" class="sidenav-trigger" style="color: black;">
+    <a href="#" data-target="mobile-nav" class="sidenav-trigger" style="color: black;" tabindex="2">
       <i class="material-icons">menu</i>
     </a>
 
     <!-- Menu desktop -->
     <ul class="right hide-on-med-and-down">
-      <li><a routerLink="/pagina1-component" routerLinkActive="active" style="color: black;">Sobre</a></li>
-      <li><a routerLink="/acervo-component" style="color: black;">Acervo</a></li>
-      <li><a routerLink="/eventos" style="color: black;">Eventos</a></li>
-      <li><a routerLink="/visita" style="color: black;">Visite-nos</a></li>
-      <li><a routerLink="/contato" style="color: black;">Contato</a></li>
+      <li><a routerLink="/pagina1-component" routerLinkActive="active" style="color: black;" tabindex="3">Sobre</a></li>
+      <li><a routerLink="/acervo-component" style="color: black;" tabindex="4">Acervo</a></li>
+      <li><a routerLink="/eventos" style="color: black;" tabindex="5" >Eventos</a></li>
+      <li><a routerLink="/visita" style="color: black;" tabindex="6">Visite-nos</a></li>
+      <li><a routerLink="/contato" style="color: black;" tabindex="7">Contato</a></li>
     </ul>
   </div>
 </nav>
 
 <!-- Menu mobile (sidenav) -->
-<ul class="sidenav" id="mobile-nav">
-  <li><a routerLink="/" class="sidenav-close">Início</a></li>
-  <li><a routerLink="/pagina1-component" routerLinkActive="active" class="sidenav-close">Sobre</a></li>
-  <li><a routerLink="/acervo-component" class="sidenav-close">Acervo</a></li>
-  <li><a routerLink="/eventos" class="sidenav-close">Eventos</a></li>
-  <li><a routerLink="/visita" class="sidenav-close">Visite-nos</a></li>
+<ul class="sidenav" id="mobile-nav" #mobile>
+  <li><a routerLink="/" class="sidenav-close" >Início</a></li>
+  <li><a routerLink="/pagina1-component" routerLinkActive="active" class="sidenav-close" >Sobre</a></li>
+  <li><a routerLink="/acervo-component" class="sidenav-close" >Acervo</a></li>
+  <li><a routerLink="/eventos" class="sidenav-close" >Eventos</a></li>
+  <li><a routerLink="/visita" class="sidenav-close" >Visite-nos</a></li>
   <li><a routerLink="/contato" class="sidenav-close">Contato</a></li>
 </ul>
 
