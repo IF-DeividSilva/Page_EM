@@ -1,7 +1,5 @@
-@import "materialize-css/dist/css/materialize.css";
-@import "material-icons/iconfont/material-icons.css";
 
 .logo {
-  height: 75px;   /* ajusta a altura */
-  width: auto;    /* mantém a proporção */
+  height: 75px;
+  width: auto;
 }

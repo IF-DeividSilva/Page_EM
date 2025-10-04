@@ -1,14 +1,18 @@
 export default `<!doctype html>
-<html lang="en" data-beasties-container="">
-<head>
+<html lang="pt-BR" data-beasties-container="">
+<head><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
   <meta charset="utf-8">
-  <title>MuseuApp</title>
+  <title>Ecomuseu do Boné</title>
   <base href="https://if-deividsilva.github.io/Page_EcoMuseu/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  
+  <!-- Materialize CDN - necessário para GitHub Pages -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <style>@font-face{font-family:'Material Icons';font-style:normal;font-weight:400;src:url(https://fonts.gstatic.com/s/materialicons/v145/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2) format('woff2');}.material-icons{font-family:'Material Icons';font-weight:normal;font-style:normal;font-size:24px;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;-webkit-font-feature-settings:'liga';-webkit-font-smoothing:antialiased;}</style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 <link rel="stylesheet" href="styles-5INURTSO.css"></head>
 <body ngcm="">
   <app-root></app-root>
-<link rel="modulepreload" href="chunk-UUTQQLSI.js"><script src="main-DTBZNYEB.js" type="module"></script></body>
-</html>
-`;
+<link rel="modulepreload" href="chunk-UUTQQLSI.js"><script src="main-O3JNDXVN.js" type="module"></script></body>
+</html>`;
