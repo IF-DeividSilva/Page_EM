@@ -14,5 +14,5 @@ export default `<!doctype html>
 <link rel="stylesheet" href="styles-5INURTSO.css"></head>
 <body ngcm="">
   <app-root></app-root>
-<link rel="modulepreload" href="chunk-UUTQQLSI.js"><script src="main-O3JNDXVN.js" type="module"></script></body>
+<script src="main-QE62PTAK.js" type="module"></script></body>
 </html>`;

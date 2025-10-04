@@ -18,48 +18,40 @@ export class App {
   constructor() {
     afterNextRender(() => {
       if (isPlatformBrowser(this.platformId)) {
-        this.initSidenav();
+        setTimeout(() => this.initSidenav(), 500);
       }
     });
   }
 
-  private async initSidenav() {
-    let MaterializeObj: any = null;
-    
-    // Tenta usar o npm module primeiro (desenvolvimento)
-    try {
-      const module = await import('materialize-css');
-      MaterializeObj = module;
-      console.log('Usando Materialize do NPM');
-    } catch (e) {
-      // Se falhar, tenta usar o global M do CDN (produção)
+  private initSidenav() {
+    // Aguarda o M estar disponível do CDN
+    const waitForM = setInterval(() => {
       if (typeof M !== 'undefined') {
-        MaterializeObj = M;
-        console.log('Usando Materialize do CDN');
-      } else {
-        console.error('Materialize não encontrado');
-        return;
+        clearInterval(waitForM);
+        
+        const sidenavElement = document.querySelector('.sidenav');
+        
+        if (sidenavElement) {
+          const instance = M.Sidenav.init(sidenavElement, {
+            edge: 'left',
+            draggable: true
+          });
+          
+          const trigger = document.querySelector('.sidenav-trigger');
+          if (trigger) {
+            trigger.addEventListener('click', (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              instance.open();
+            });
+          }
+          
+          console.log('Sidenav OK');
+        }
       }
-    }
+    }, 100);
     
-    const sidenavElement = document.querySelector('.sidenav');
-    
-    if (sidenavElement && MaterializeObj) {
-      const instance = MaterializeObj.Sidenav.init(sidenavElement, {
-        edge: 'left',
-        draggable: true
-      });
-      
-      const trigger = document.querySelector('.sidenav-trigger');
-      if (trigger) {
-        trigger.addEventListener('click', (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          instance.open();
-        });
-      }
-      
-      console.log('✅ Sidenav pronto!');
-    }
+    // Timeout de segurança (5 segundos)
+    setTimeout(() => clearInterval(waitForM), 5000);
   }
 }
