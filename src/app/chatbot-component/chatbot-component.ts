@@ -5,7 +5,8 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ChatbotService } from '../chatbot-component/chatbot-service';
-
+// para o git pages atualizar as respostas do cbot
+import { ChangeDetectorRef } from '@angular/core';
 declare const M: any;
 
 interface Mensagem {
@@ -22,7 +23,7 @@ interface Mensagem {
 })
 
 export class ChatbotComponent implements OnInit, OnDestroy, AfterViewChecked {
-  constructor(private chatbotService: ChatbotService) {}
+  constructor(private chatbotService: ChatbotService, private cdr: ChangeDetectorRef) {}
 
   @Input() idConteudo!: number;
   @Input() titulo = 'este item';
@@ -157,6 +158,7 @@ erro    = '';
     this.mensagens.push({ role: 'user', text: pergunta });
     this.loading      = true;
     this.shouldScroll = true;
+    this.cdr.detectChanges();
 
     try {
       const resposta = await this.chatbotService.ask(pergunta, this.idConteudo);
@@ -166,6 +168,7 @@ erro    = '';
     } finally {
       this.loading      = false;
       this.shouldScroll = true;
+      this.cdr.detectChanges();
     }
   }
 }
