@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/IF-DeividSilva/ext_program/main/1.png" 
+<!--<img src="https://raw.githubusercontent.com/IF-DeividSilva/ext_program/main/1.png" 
      alt="Fotografia de uma fábrica de bonés, mostrando um jovem trabalhador sorrindo em primeiro plano, manuseando uma pilha de bonés brancos, com outras máquinas e funcionários ao fundo." 
      tabindex="0"
      style="width: 100%; max-width: 800px; height: auto; display: block; margin: 0 auto;">
@@ -10,23 +10,67 @@
 
 <audio #player src="https://raw.githubusercontent.com/IF-DeividSilva/ext_program/main/audio_descricao_foto1.wav"></audio>
 
-<h2 tabindex="0" style="text-align: center; margin-top: 20px;">Setor de confecção de bonés tem pequeno aquecimento</h2>
-<p tabindex="0" style="text-align: center; max-width: 800px; margin: 10px auto;">
- Setor de confecção de bonés tem pequeno aquecimento
-Eldir Rodrigues — Editoria Local
+ Carregando -->
+<div id="acervo" role="feed" aria-label="acervo" aria-busy="true">
 
-A proximidade das campanhas eleitorais deste ano deve provocar certo aquecimento no setor de confecções de bonés em Apucarana. Algumas confecções de Apucarana já começam a sentir o reflexo do aumento de pedidos. Só em uma empresa do setor foram feitos cerca de 150 mil bonés destinados a atender a demanda das campanhas eleitorais deste ano.
+ <div *ngIf="carregando">
+   <p>Carregando acervo...</p>
+  </div>
 
-Quando as encomendas começaram a aparecer, os empresários do setor sentiram dificuldades em conseguir mão-de-obra especializada para atender toda a demanda. Os empresários acreditam que as empresas que não investiram em equipamentos modernos vão enfrentar dificuldades. Caso contrário, afirmam, o setor não terá condições de fabricar em tempo hábil os pedidos extras das campanhas eleitorais.
+  <!-- Erro -->
+  <div *ngIf="erro">
+    <p>Erro ao carregar os dados.</p>
+  </div>
 
-O setor está em crise desde o fim do ano passado. Antônio Carlos Marciano Machado, diretor de Marketing e Comércio Exterior da Cotton’s Bonés, nos últimos dois meses as indústrias do setor que operavam com apenas 30% da capacidade total, hoje estão quase no limite da demanda. “Entretanto, houve uma pequena melhora no setor com as campanhas eleitorais. Essas, no entanto, não chegam a resolver o problema, porque depois voltará tudo como antes”, disse.
+  <!-- Cards dos conteúdos com materializer -->
 
-Ele acrescenta que algumas empresas estão com dificuldade em segurar o pessoal até o fim do ano, quando, novamente, as eleições municipais aquecem o setor. “As campanhas eleitorais fazem bem, mas o setor não suporta muito tempo sem mercado”, acrescenta.
+  <div class="row" role="article" *ngFor="let item of conteudos" aria-label="{{item.titulo}}" >
+    <div class="col s12 m6">
+      <!-- TODO: Arrumar o PDF (m sei se é pssivel) e arrumar as rotas dos arquivos para suas respectivas paginas (OK)... -->
+   
+        <div class="card hoverable"> <div class="card-image">
+            <img *ngIf="item.arquivo.endsWith('.png') || item.arquivo.endsWith('.jpg') || item.arquivo.endsWith('.jpeg')" 
+                [src]="acervoRaw + '/' + item.categoria + '/' + item.arquivo" 
+                [alt]="">
 
-SEMACOTAI. Segundo ele, o setor iniciou a semana passada com pequeno aquecimento. “Isso é resultado de uma reação, em função da descentralização das empresas. A inadimplência e a redução da demanda são apontadas como as principais causas desta fase difícil. Todos os anos, após as eleições municipais, o setor perde em média de 2 mil a 3 mil costureiras contratadas somente para atender as campanhas.”
+            <video *ngIf="item.arquivo.endsWith('.MP4')" 
+                [src]="acervoRaw + '/' + item.categoria + '/' + item.arquivo" 
+                controls>
+            </video>
 
-O diretor de Marketing da Cotton’s esclareceu que os reflexos do ano eleitoral devem surgir com mais intensidade no final deste mês. Ele afirma que, se forem confirmadas as pesquisas, as fábricas da cidade podem trabalhar com até 80% da capacidade “de pico” de produção, especialmente com artigos promocionais, principalmente bonés”, analisa.
+            <img *ngIf="item.arquivo.endsWith('.pdf')"
+                src="assets/pdf.png"
+                alt="Documento PDF">
 
-EMBEIMA. O proprietário da Bonelli Bonés, João Begali Neto, acredita que a proporção de produção para as postulações das candidaturas este perfil para os meses de junho, julho e agosto. “Se as pesquisas se confirmarem, as fábricas vão trabalhar com 95% da capacidade máxima de produção já em agosto. Neste ano, a produção é limitada em 95%, quando as eleições municipais se aproximam”, ressaltou.
+            <span class="card-title">{{ item.titulo }}</span>
+            <a [routerLink]="['/detalhes-component/', item.id_conteudo_pk]"
+             class="btn-floating halfway-fab waves-effect waves-light blue"
+             [attr.aria-label]="'Ver mais sobre ' + item.titulo">
+              <i class="material-icons"  aria-hidden="true"> add</i>
+            </a>
+          </div>
+          
+          <div class="card-content">
+            <p><strong>{{ item.autor }}</strong></p>
+            <p>Categoria: {{ item.categoria }}</p>
+            <small>ID: {{ item.id_conteudo_pk }}</small>
+            
+            
+          </div>
+          <button class="btn green darken-2 waves-effect waves-light" (click)="chatbot.open()">
+  <i class="material-icons left">chat</i> ChatBot
+</button>
 
-Neste ano, a produção é limitada em 95%, quando as eleições municipais se aproximam. “Comandaram 300 mil peças.” Comandaram 300 mil peças, mas as fábricas não têm condições de atender toda a demanda. “A produção de bonés não atingirá mais do que 95% da capacidade total, mesmo que as fábricas trabalhem no limite máximo de sua produção. Isso porque a produção é limitada pela capacidade de costura. Um boné custa em torno de 120 mil bonés por mês, ao passo que hoje a produção mensal se faz em torno de 50 mil peças. “Comandaram 300 mil peças. As fábricas não têm condições de atender toda a demanda. A produção não passará de 95% da capacidade total, mesmo que as fábricas trabalhem em sua máxima capacidade de produção”, observou.
+  <app-chatbot #chatbot [idConteudo]="item.id_conteudo_pk" [titulo]="item.titulo" />
+
+    </div>
+  </div>
+</div>
+
+<!-- Cards dos conteúdos 
+<div *ngFor="let item of conteudos">
+  <h2>{{ item.titulo }}</h2>
+  <p>{{ item.autor }}</p>
+  <p>{{ item.categoria }}</p>
+  <p>{{ item.WCAG[0].WCAG_id }}</p>
+</div>-->

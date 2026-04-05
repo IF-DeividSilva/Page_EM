@@ -2,6 +2,7 @@
   "routes": {
     "/Page_EcoMuseu": {},
     "/Page_EcoMuseu/acervo-component": {},
-    "/Page_EcoMuseu/pagina1-component": {}
+    "/Page_EcoMuseu/sobre-component": {},
+    "/Page_EcoMuseu/visite-nos-component": {}
   }
 }

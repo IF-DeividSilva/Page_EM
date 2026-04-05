@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Pagina1Component } from '../pagina1-component/pagina1-component';
+import { SobreComponent } from '../sobre-component/sobre-component';
 
 
 import { ActivatedRoute, RouterLink } from '@angular/router';

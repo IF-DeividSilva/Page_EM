@@ -16,18 +16,22 @@ export class App {
   protected readonly title = signal('museu-app');
   private platformId = inject(PLATFORM_ID);
   private sidenavInstance: any;
-  private router = inject(Router);
+  public router = inject(Router);
 
   constructor() {
+    // para rodar dps da página ser renderizada
     afterNextRender(() => {
       if (isPlatformBrowser(this.platformId)) {
+        // espera 500ms para inicializar o menu (tempo pro Materialize carregar)
         setTimeout(() => this.initSidenav(), 500);
+        // função para controlar o Foco da página apos troca de rotas
         this.setupFocusManagement();
       }
     });
   }
 
   private setupFocusManagement() {
+    // filtro para pegar eventos (quando a nav termina)
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe(() => {
@@ -51,21 +55,51 @@ export class App {
     });
   }
 
+  // inicializa o menu lateral
   private initSidenav() {
-  const waitForM = setInterval(() => {
-    if (typeof M !== 'undefined') {
-      clearInterval(waitForM);
-      
-      const sidenavElement = document.querySelector('.sidenav');
-      const trigger = document.querySelector('.sidenav-trigger');
+    // verifica se o Materialize carregou, quando ele carrega o clear para o loop
+    const waitForM = setInterval(() => {
+      if (typeof M !== 'undefined') {
+        clearInterval(waitForM);
+        // seleçao de elementos na DOM
+        const sidenavElement = document.querySelector('.sidenav');
+        const trigger = document.querySelector('.sidenav-trigger');
+
+        // inicializar side nav setando aria-hidden = true
+        sidenavElement?.setAttribute('aria-hidden', 'true');
+
+        // inicializa os links com tabindex -1 para "esconder"
+        const links = sidenavElement?.querySelectorAll('a');
+        links?.forEach(link => link.setAttribute('tabindex', '-1'))
       
       if (sidenavElement) {
+        // inicializa o Menu
         this.sidenavInstance = M.Sidenav.init(sidenavElement, {
           edge: 'right',
           draggable: true,
+          
+          // quando aberto
           onOpenStart: () => {
+            // set aria-hidden para falso (...)
+            sidenavElement.setAttribute('aria-hidden', 'false');
+            trigger?.setAttribute('aria-expanded', 'true');
+            // tira o tabindex dos links de nav
+            const links = sidenavElement.querySelectorAll('a');
+            links.forEach(link => link.removeAttribute('tabindex'));
+            
+            // quando o menu abre o foco é colocado no primeiro link
             const firstLink = sidenavElement.querySelector('a');
             setTimeout(() => (firstLink as HTMLElement)?.focus(), 100);
+          },
+
+          // quando fechado
+          onCloseEnd: () => {
+            // set aria-hidden para true (...)
+            sidenavElement.setAttribute('aria-hidden', 'true');
+            trigger?.setAttribute('aria-expanded', 'false');
+            // pega os links da nav e coloca tabindex -1 para "esconder"
+            const links = sidenavElement.querySelectorAll('a');
+            links.forEach(link => link.setAttribute('tabindex', '-1'));
           }
         });
         
@@ -79,7 +113,7 @@ export class App {
           });
         }
         
-        console.log('Sidenav OK');
+       // console.log('Sidenav OK');
       }
     }
   }, 100);

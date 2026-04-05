@@ -1,0 +1,33 @@
+.card-content p{
+    color: black;
+}
+
+.card-title {
+    color: black;
+    background-color: blue;
+}
+
+video{
+    width: 100%; 
+    height: 100%; 
+    display: block;
+}
+
+@media (max-width: 993px) {
+
+    .card-title{
+        display: block;
+        width: 100%;
+        font-size: medium;
+        white-space: nowrap;       /* impede quebra de linha */
+        overflow: hidden;          /* corta o excesso */
+        text-overflow: ellipsis;   /* adiciona "..." no final */
+
+    }
+
+    img, video{
+        width: 300px;   /* largura fixa */
+        height: 300px;  /* altura fixa */
+        object-fit: cover; /* corta e ajusta sem distorcer */
+    }
+}

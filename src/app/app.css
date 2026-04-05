@@ -1,11 +1,9 @@
-/* Removido imports do Materialize - agora vem do CDN no index.html */
-
 .logo {
   height: 70px;
   width: auto;
 }
 
-/* Esconde o sidenav mobile de leitores de tela em desktop */
+/* Esconde o sidenav mobile em desktop */
 @media (min-width: 993px) {
   .sidenav {
     display: none !important;
