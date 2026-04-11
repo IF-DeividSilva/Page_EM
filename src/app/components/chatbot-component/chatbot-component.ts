@@ -4,7 +4,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ChatbotService } from '../chatbot-component/chatbot-service';
+import { ChatbotService } from './chatbot-service';
 // para o git pages atualizar as respostas do cbot
 import { ChangeDetectorRef } from '@angular/core';
 declare const M: any;
@@ -90,50 +90,57 @@ export class ChatbotComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.recognition  = new SR();
 
     this.recognition.lang           = 'pt-BR';
-    this.recognition.continuous     = true;  // para após uma frase
-    this.recognition.interimResults = false;  // só resultado final
+    this.recognition.continuous     = false;  // para após uma frase
+    this.recognition.interimResults = true;  // só resultado final
 
-    // Quando o usuário terminar de falar
-    this.recognition.onresult = (event: any) => {
-      const texto = event.results[0][0].transcript;
-      this.userInput   = texto;
-      this.isRecording = false;
-      this.erroMic     = '';
-      this.send(); // envia automaticamente
-    };
-
-    // Se o usuário negar permissão ou ocorrer outro erro
-    this.recognition.onerror = (event: any) => {
-      this.isRecording = false;
-
-      if (event.error === 'not-allowed') {
-        this.erroMic = 'Permissão de microfone negada. Verifique as configurações do navegador.';
-      } else if (event.error === 'no-speech') {
-        this.erroMic = 'Nenhuma fala detectada. Tente novamente.';
-      } else {
-        this.erroMic = 'Erro ao usar o microfone. Tente novamente.';
-      }
-
-      // Limpa o erro após 4 segundos
-      setTimeout(() => this.erroMic = '', 4000);
-    };
-
-    // Quando parar de ouvir por qualquer motivo
-    this.recognition.onend = () => {
-      this.isRecording = false;
-    };
-  }
-
-  toggleMic() {
-    if (this.isRecording) {
-      this.recognition.stop();
-      this.isRecording = false;
-    } else {
-      this.erroMic     = '';
-      this.isRecording = true;
-      this.recognition.start();
+     // Atualiza o input em tempo real enquanto o usuário fala
+  this.recognition.onresult = (event: any) => {
+    let texto = '';
+    for (let i = 0; i < event.results.length; i++) {
+      texto += event.results[i][0].transcript;
     }
-  }
+    this.userInput = texto.trim();
+    this.cdr.detectChanges();
+  };
+
+  // Quando o browser detectar silêncio e parar sozinho
+  this.recognition.onend = () => {
+    this.isRecording = false;
+
+    // Se captou algo, envia automaticamente
+    if (this.userInput.trim()) {
+      this.send();
+    }
+
+    this.cdr.detectChanges();
+  };
+
+  this.recognition.onerror = (event: any) => {
+    this.isRecording = false;
+
+    if (event.error === 'not-allowed') {
+      this.erroMic = 'Permissão de microfone negada. Verifique as configurações do navegador.';
+    } else if (event.error === 'no-speech') {
+      this.erroMic = 'Nenhuma fala detectada. Tente novamente.';
+    } else {
+      this.erroMic = 'Erro ao usar o microfone. Tente novamente.';
+    }
+
+    setTimeout(() => { this.erroMic = ''; this.cdr.detectChanges(); }, 4000);
+  };
+}
+
+// Agora o toggleMic só inicia — parar é coisa do browser
+toggleMic() {
+  if (this.isRecording) return; // ignora clique duplo enquanto grava
+
+  this.userInput   = '';
+  this.erroMic     = '';
+  this.isRecording = true;
+  this.recognition.start();
+  this.cdr.detectChanges();
+}
+
 
   // ------------------------------------------------------------------
   // Modal

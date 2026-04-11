@@ -1,10 +1,10 @@
 import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { ChatbotComponent } from '../chatbot-component/chatbot-component';
+import { ChatbotComponent } from '../../components/chatbot-component/chatbot-component';
 
 
-import { AcervoService } from './acervo.service';
+import { AcervoService } from './acervo-service';
 
 @Component({
   selector: 'app-acervo-component',

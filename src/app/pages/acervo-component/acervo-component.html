@@ -44,20 +44,20 @@
 
             <span class="card-title">{{ item.titulo }}</span>
             <a [routerLink]="['/detalhes-component/', item.id_conteudo_pk]"
-             class="btn-floating halfway-fab waves-effect waves-light blue"
+             class="btn-floating halfway-fab waves-effect waves-light cyan lighten-1"
              [attr.aria-label]="'Ver mais sobre ' + item.titulo">
               <i class="material-icons"  aria-hidden="true"> add</i>
             </a>
           </div>
           
           <div class="card-content">
-            <p><strong>{{ item.autor }}</strong></p>
+            <p><strong>Autor: {{ item.autor }}</strong></p>
             <p>Categoria: {{ item.categoria }}</p>
             <small>ID: {{ item.id_conteudo_pk }}</small>
             
             
           </div>
-          <button class="btn green darken-2 waves-effect waves-light" (click)="chatbot.open()">
+          <button class="btn light-green lighten-1 waves-effect waves-light" (click)="chatbot.open()">
   <i class="material-icons left">chat</i> ChatBot
 </button>
 

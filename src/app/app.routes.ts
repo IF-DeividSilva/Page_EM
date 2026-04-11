@@ -1,11 +1,11 @@
 import { Routes } from '@angular/router';
 
 
-import { SobreComponent } from './sobre-component/sobre-component';
-import { LandPageComponent } from './land-page-component/land-page-component';
-import { AcervoComponent } from '../app/acervo-component/acervo-component';
-import { DetalhesComponent } from './detalhes-component/detalhes-component';
-import { VisiteNosComponent } from './visite-nos-component/visite-nos-component';
+import { SobreComponent } from './pages/sobre-component/sobre-component';
+import { LandPageComponent } from './pages/land-page-component/land-page-component';
+import { AcervoComponent } from './pages/acervo-component/acervo-component';
+import { DetalhesComponent } from './pages/detalhes-component/detalhes-component';
+import { VisiteNosComponent } from './pages/visite-nos-component/visite-nos-component';
 
 
 

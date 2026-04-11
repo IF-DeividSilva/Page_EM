@@ -1,0 +1,33 @@
+.logo {
+  height: 70px;
+  width: auto;
+}
+
+/* Esconde o sidenav mobile em desktop */
+@media (min-width: 993px) {
+  .sidenav {
+    display: none !important;
+  }
+  
+  .sidenav-trigger {
+    display: none !important;
+  }
+}
+
+/* Ajustes para mobile */
+@media (max-width: 992px) {
+  .brand-logo {
+    left: 0 !important;
+    transform: none !important;
+  }
+  
+  .brand-logo img {
+    height: 40px !important;
+    margin-top: 12px;
+  }
+}
+@media (max-width: 350px) {
+  .brand-logo span {
+    display: none;
+  }
+}

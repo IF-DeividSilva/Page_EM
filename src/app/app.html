@@ -1,45 +1,6 @@
-<nav class="orange lighten-4">
-  <div class="nav-wrapper container">
-    <a routerLink="/" class="brand-logo" tabindex="1">
-      <img src="assets/logo-ecomuseu.png" alt="Logo do Ecomuseu do Boné" class="logo responsive-img" style="height: 50px; margin-top: 8px;">
-      <span style="vertical-align: top; margin-left: 15px; font-size: 1.8rem; color: black;">Ecomuseu do Boné</span>
-    </a>
 
-    <!-- Botão hamburguer para mobile -->
-    <!-- arias --
-     aria label para colocar a descrição do botão
-     aria expanded para indicar se o menu está espandido ou não
-     aria controls para "linkar" com o item que vai espandir ou não... no caso mobile-nav -->
-     
-    <a href="#" data-target="mobile-nav" class="sidenav-trigger right" style="color: black;" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="mobile-nav">
-      <i class="material-icons" aria-hidden="true">menu</i>
-    </a>
-
-    <!-- Menu desktop -->
-    <ul class="right hide-on-med-and-down">
-      <li><a routerLink="/pagina1-component" routerLinkActive="active" style="color: black;" >Sobre</a></li>
-      <li><a routerLink="/acervo-component" style="color: black;" >Acervo</a></li>
-      <!--<li><a routerLink="/eventos" style="color: black;">Eventos</a></li> -->
-      <li><a routerLink="/visita" style="color: black;">Visite-nos</a></li>
-      <!-- <li><a routerLink="/contato" style="color: black;">Contato</a></li> -->
-    </ul>
-  </div>
-</nav>
-
-<!-- Menu mobile (sidenav) -->
-<ul class="sidenav" id="mobile-nav" #mobile role="navigation" aria-label="Menu mobile" tabindex="0">
-  <li><a routerLink="/" class="sidenav-close"
-         [attr.aria-current]="router.isActive('/', true) ? 'page' : null">Início</a></li>
-  <li><a routerLink="/sobre-component" routerLinkActive="active" class="sidenav-close"
-         [attr.aria-current]="router.isActive('/sobre-component', true) ? 'page' : null">Sobre</a></li>
-  <li><a routerLink="/acervo-component" class="sidenav-close"
-         [attr.aria-current]="router.isActive('/acervo-component', true) ? 'page' : null">Acervo</a></li>
- <!-- <li><a routerLink="/eventos" class="sidenav-close"
-         [attr.aria-current]="router.isActive('/eventos', true) ? 'page' : null">Eventos</a></li> -->
-  <li><a routerLink="/visite-nos-component" class="sidenav-close"
-         [attr.aria-current]="router.isActive('/visite-nos-component', true) ? 'page' : null">Visite-nos</a></li>
- <!-- <li><a routerLink="/contato" class="sidenav-close"
-         [attr.aria-current]="router.isActive('/contato', true) ? 'page' : null">Contato</a></li> -->
-</ul>
+<app-navbar></app-navbar>
 
 <router-outlet></router-outlet>
+
+<app-footer></app-footer>

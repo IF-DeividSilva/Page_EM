@@ -1,0 +1,35 @@
+<h2 *ngIf="conteudoDetalhado">{{conteudoDetalhado.titulo}}</h2>
+
+<div class="midia-container" *ngIf="conteudoDetalhado?.arquivo">
+    <div *ngIf="isImagem()" class="midia-wrapper">
+        <img [src]="obterUrlArquivo()" [alt]="conteudoDetalhado.titulo" class="midia-img">
+    </div>
+    
+    <div *ngIf="isPDF()" class="midia-wrapper">
+        <iframe [src]="obterUrlPDFViewer()" class="midia-pdf"></iframe>
+    </div>
+    
+    <div *ngIf="isVideo()" class="midia-wrapper">
+        <video controls class="midia-video">
+            <source [src]="obterUrlArquivo()" type="video/mp4">
+            Seu navegador não suporta vídeo.
+        </video>
+    </div>
+</div>
+
+<body *ngIf="conteudoDetalhado"> 
+    <div class="conteudo-d">
+        <p>Autor: {{conteudoDetalhado.autor}}</p>
+        <p>Ano: {{conteudoDetalhado.ano}}</p>
+        <p>Assunto: {{conteudoDetalhado.assunto}}</p>
+        <p>Conteúdo: {{conteudoDetalhado.conteudo}}</p>
+
+        <button class="btn waves-effect waves-light"
+                aria-label="Reproduzir áudio"
+                [attr.aria-pressed]="reproduzindo"
+                (click)="toggleReproducao()">
+        <i class="material-icons">{{ reproduzindo ? 'pause' : 'play_arrow' }}</i>
+        </button>
+        
+    </div>
+</body>
