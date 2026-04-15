@@ -2,11 +2,13 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { AcervoService } from '../acervo-component/acervo-service';
+import { AcervoService } from '../../services/acervo-service';
+import { TextFieldModule } from '@angular/cdk/text-field';
+import { AccessibilityComponent } from '../../components/accessibility-component/accessibility-component';
 
 @Component({
   selector: 'app-detalhes-component',
-  imports: [RouterLink, CommonModule],
+  imports: [RouterLink, CommonModule , TextFieldModule, AccessibilityComponent],
   templateUrl: './detalhes-component.html',
   styleUrl: './detalhes-component.css'
 })

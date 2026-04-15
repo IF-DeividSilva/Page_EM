@@ -5,12 +5,12 @@
       <span style="vertical-align: top; margin-left: 15px; font-size: 1.8rem; color: black;">EcoMuseu do Boné</span>
     </a>
 
-    <a href="#" data-target="mobile-nav" class="sidenav-trigger right" style="color: black;"
-       aria-label="Abrir menu de navegação"
-       aria-expanded="false"
-       aria-controls="mobile-nav">
+    <button data-target="mobile-nav" class="sidenav-trigger right btn-hamburger"
+            aria-label="Abrir menu de navegação"
+            aria-expanded="false"
+            aria-controls="mobile-nav">
       <i class="material-icons" aria-hidden="true">menu</i>
-    </a>
+    </button>
 
     <!-- Menu desktop -->
     <ul class="right hide-on-med-and-down">
@@ -22,7 +22,7 @@
 </nav>
 
 <!-- Menu mobile (sidenav) -->
-<ul class="sidenav" id="mobile-nav" role="navigation" aria-label="Menu mobile" tabindex="0">
+<ul class="sidenav" id="mobile-nav" aria-label="Menu mobile" >
   <li><a routerLink="/" class="sidenav-close"
          [attr.aria-current]="router.isActive('/', true) ? 'page' : null">Início</a></li>
   <li><a routerLink="/sobre-component" routerLinkActive="active" class="sidenav-close"

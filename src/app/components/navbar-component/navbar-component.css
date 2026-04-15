@@ -3,6 +3,27 @@
   width: auto;
 }
 
+/* Botão hamburger sem background */
+.btn-hamburger {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
+}
+
+.btn-hamburger:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+.btn-hamburger:focus {
+  outline: none;
+}
+
 /* Esconde o sidenav mobile em desktop */
 @media (min-width: 993px) {
   .sidenav {

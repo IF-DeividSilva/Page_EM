@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { AcervoService } from '../../pages/acervo-component/acervo-service'; 
+import { AcervoService } from '../../services/acervo-service'; 
 
 @Injectable({ providedIn: 'root' })
 export class ChatbotService {

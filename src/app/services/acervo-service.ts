@@ -7,6 +7,7 @@ export class AcervoService {
   // endereço do repositorio
   private baseRaw = 'https://raw.githubusercontent.com/IF-DeividSilva/acervo-ecomuseu/main/Metadados';
   public acervoRaw = 'https://raw.githubusercontent.com/IF-DeividSilva/acervo-ecomuseu/main/Dados';
+  private wcagRaw = 'https://raw.githubusercontent.com/IF-DeividSilva/acervo-ecomuseu/main/Metadados/metadados_WCAG.json';
 
   constructor(private http: HttpClient) {}
 
@@ -16,6 +17,10 @@ export class AcervoService {
 
   getConteudo(id: number) {
     return this.http.get<any>(`${this.baseRaw}/metadados_conteudos/conteudo_${id}.json`);
+  }
+
+  getWcagMetadados() {
+    return this.http.get<any[]>(this.wcagRaw);
   }
 
  // getAcervo(arquivo: string){

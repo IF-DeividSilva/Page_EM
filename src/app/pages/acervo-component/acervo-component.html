@@ -1,76 +1,120 @@
-<!--<img src="https://raw.githubusercontent.com/IF-DeividSilva/ext_program/main/1.png" 
-     alt="Fotografia de uma fábrica de bonés, mostrando um jovem trabalhador sorrindo em primeiro plano, manuseando uma pilha de bonés brancos, com outras máquinas e funcionários ao fundo." 
-     tabindex="0"
-     style="width: 100%; max-width: 800px; height: auto; display: block; margin: 0 auto;">
+<!--Carregando -->
+<div id="acervo" role="feed" aria-label="Acervo do EcoMuseu do Boné" aria-busy="true">
 
-<button class="btn waves-effect" (click)="toggleAudio()" aria-label="Reproduzir ou pausar áudio">
-  <i class="material-icons left">{{ isPlaying ? 'pause_circle_filled' : 'play_circle_filled' }}</i>
-  {{ isPlaying ? 'Pausar' : 'Ouvir' }}
-</button>
-
-<audio #player src="https://raw.githubusercontent.com/IF-DeividSilva/ext_program/main/audio_descricao_foto1.wav"></audio>
-
- Carregando -->
-<div id="acervo" role="feed" aria-label="acervo" aria-busy="true">
-
- <div *ngIf="carregando">
-   <p>Carregando acervo...</p>
+  <div *ngIf="carregando" role="status" aria-live="polite">
+    <p>Carregando acervo...</p>
   </div>
 
   <!-- Erro -->
-  <div *ngIf="erro">
+  <div *ngIf="erro" role="alert" aria-live="assertive">
     <p>Erro ao carregar os dados.</p>
   </div>
 
-  <!-- Cards dos conteúdos com materializer -->
+  <!-- Buscador -->
+  <div class="row" *ngIf="!carregando && !erro" role="search" aria-label="Seção de busca do acervo">
+    <div class="col s12 m6 l5">
+      <div class="input-field">
+        <input id="busca-acervo" 
+               type="text" 
+               [(ngModel)]="termoBusca" 
+               placeholder="Buscar pelo título..." 
+               aria-label="Campo de busca"
+               aria-describedby="busca-descricao"
+               [attr.aria-invalid]="termoBusca && conteudosFiltrados.length === 0"
+               autocomplete="off">
+        <label for="busca-acervo">Buscar no acervo</label>
+        <small id="busca-descricao" class="grey-text">Digite o título para filtrar os itens</small>
+      </div>
+    </div>
+    <div class="col s2 m2 l1" *ngIf="termoBusca">
+      <button (click)="termoBusca = ''" 
+              type="button"
+              class="btn-flat waves-effect waves-light red-text"
+              aria-label="Limpar campo de busca"
+              aria-pressed="false"
+              style="margin-top: 25px;">
+        <i class="material-icons" aria-hidden="true">clear</i>
+      </button>
+    </div>
+  </div>
 
-  <div class="row" role="article" *ngFor="let item of conteudos" aria-label="{{item.titulo}}" >
+  <!-- Resultado da busca - Sem resultados -->
+  <div *ngIf="!carregando && !erro && conteudosFiltrados.length === 0 && termoBusca" 
+       role="status" 
+       aria-live="polite" 
+       aria-atomic="true"
+       class="center">
+    <p class="grey-text text-darken-1" aria-label="Mensagem de nenhum resultado">
+      Nenhum item encontrado para: "{{ termoBusca }}"
+    </p>
+  </div>
+
+  <!-- Resultado da busca - Contador -->
+  <div *ngIf="!carregando && !erro && conteudosFiltrados.length > 0" 
+       role="status" 
+       aria-live="polite"
+       class="center" 
+       style="margin: 10px 0;">
+    <small class="grey-text" [attr.aria-label]="'Encontrados ' + conteudosFiltrados.length + ' item(ns)'">
+      {{ conteudosFiltrados.length }} de {{ conteudos.length }} item
+    </small>
+  </div>
+
+  <!-- Cards -->
+  <div class="row" role="article" *ngFor="let item of conteudosFiltrados; let idx = index"
+       [attr.aria-label]="item.titulo"
+       [attr.aria-description]="'Categoria: ' + item.categoria + '. Autor: ' + item.autor"
+       [attr.aria-setsize]="conteudosFiltrados.length"
+       [attr.aria-posinset]="idx + 1">
+
     <div class="col s12 m6">
-      <!-- TODO: Arrumar o PDF (m sei se é pssivel) e arrumar as rotas dos arquivos para suas respectivas paginas (OK)... -->
-   
-        <div class="card hoverable"> <div class="card-image">
-            <img *ngIf="item.arquivo.endsWith('.png') || item.arquivo.endsWith('.jpg') || item.arquivo.endsWith('.jpeg')" 
-                [src]="acervoRaw + '/' + item.categoria + '/' + item.arquivo" 
-                [alt]="">
+      <div class="card hoverable" 
+           [attr.id]="'card-' + item.id_conteudo_pk"
+           role="region"
+           [attr.aria-label]="'Card do acervo: ' + item.titulo">
+        <div class="card-image">
 
-            <video *ngIf="item.arquivo.endsWith('.MP4')" 
-                [src]="acervoRaw + '/' + item.categoria + '/' + item.arquivo" 
-                controls>
-            </video>
+          <img *ngIf="item.arquivo.endsWith('.png') || item.arquivo.endsWith('.jpg') || item.arquivo.endsWith('.jpeg')"
+               [src]="acervoRaw + '/' + item.categoria + '/' + item.arquivo"
+               [attr.alt]="'Imagem do conteúdo: ' + item.titulo">
 
-            <img *ngIf="item.arquivo.endsWith('.pdf')"
-                src="assets/pdf.png"
-                alt="Documento PDF">
+          <video *ngIf="item.arquivo.endsWith('.MP4')"
+                 [src]="acervoRaw + '/' + item.categoria + '/' + item.arquivo"
+                 [attr.aria-label]="'Vídeo: ' + item.titulo">
+          </video>
 
-            <span class="card-title">{{ item.titulo }}</span>
-            <a [routerLink]="['/detalhes-component/', item.id_conteudo_pk]"
-             class="btn-floating halfway-fab waves-effect waves-light cyan lighten-1"
-             [attr.aria-label]="'Ver mais sobre ' + item.titulo">
-              <i class="material-icons"  aria-hidden="true"> add</i>
-            </a>
-          </div>
-          
-          <div class="card-content">
-            <p><strong>Autor: {{ item.autor }}</strong></p>
-            <p>Categoria: {{ item.categoria }}</p>
-            <small>ID: {{ item.id_conteudo_pk }}</small>
-            
-            
-          </div>
-          <button class="btn light-green lighten-1 waves-effect waves-light" (click)="chatbot.open()">
-  <i class="material-icons left">chat</i> ChatBot
-</button>
+          <img *ngIf="item.arquivo.endsWith('.pdf')"
+               src="assets/pdf.png"
+               alt="Documento PDF">
 
-  <app-chatbot #chatbot [idConteudo]="item.id_conteudo_pk" [titulo]="item.titulo" />
+          <span class="card-title" aria-hidden="true">{{ item.titulo }}</span>
 
+          <button [routerLink]="['/detalhes-component/', item.id_conteudo_pk]"
+                  class="btn-floating halfway-fab waves-effect waves-light cyan lighten-1"
+                  [attr.aria-label]="'Ver detalhes e informações completas sobre ' + item.titulo"
+                  type="button"
+                  [attr.aria-describedby]="'card-' + item.id_conteudo_pk">
+            <i class="material-icons" aria-hidden="true">add</i>
+          </button>
+        </div>
+
+        <div class="card-content">
+          <p><strong>Autor: {{ item.autor }}</strong></p>
+          <p>Categoria: {{ item.categoria }}</p>
+          <small [attr.aria-label]="'Identificador do conteúdo: ' + item.id_conteudo_pk">ID: {{ item.id_conteudo_pk }}</small>
+        </div>
+
+        <button type="button"
+                class="btn light-green lighten-1 waves-effect waves-light"
+                [attr.aria-label]="'Abrir chatbot para obter informações sobre ' + item.titulo"
+                [attr.aria-describedby]="'desc-' + item.id_conteudo_pk"
+                (click)="chatbot.open()">
+          <i class="material-icons left" aria-hidden="true">chat</i> ChatBot
+        </button>
+
+        <app-chatbot #chatbot [idConteudo]="item.id_conteudo_pk" [titulo]="item.titulo" 
+                     [attr.id]="'desc-' + item.id_conteudo_pk" />
+      </div>
     </div>
   </div>
 </div>
-
-<!-- Cards dos conteúdos 
-<div *ngFor="let item of conteudos">
-  <h2>{{ item.titulo }}</h2>
-  <p>{{ item.autor }}</p>
-  <p>{{ item.categoria }}</p>
-  <p>{{ item.WCAG[0].WCAG_id }}</p>
-</div>-->

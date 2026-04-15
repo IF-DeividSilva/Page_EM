@@ -34,3 +34,9 @@
     border-radius: 4px;
     background: #000;
 }
+textarea[readonly] {
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  resize: none;
+  cursor: default;
+}
