@@ -1,16 +1,13 @@
-<!--Carregando -->
-<div id="acervo" role="feed" aria-label="Acervo do EcoMuseu do Boné" aria-busy="true">
+<div id="acervo" role="list" aria-label="Acervo do EcoMuseu do Boné" [attr.aria-busy]="carregando">
 
   <div *ngIf="carregando" role="status" aria-live="polite">
     <p>Carregando acervo...</p>
   </div>
 
-  <!-- Erro -->
   <div *ngIf="erro" role="alert" aria-live="assertive">
     <p>Erro ao carregar os dados.</p>
   </div>
 
-  <!-- Buscador -->
   <div class="row" *ngIf="!carregando && !erro" role="search" aria-label="Seção de busca do acervo">
     <div class="col s12 m6 l5">
       <div class="input-field">
@@ -38,7 +35,6 @@
     </div>
   </div>
 
-  <!-- Resultado da busca - Sem resultados -->
   <div *ngIf="!carregando && !erro && conteudosFiltrados.length === 0 && termoBusca" 
        role="status" 
        aria-live="polite" 
@@ -49,7 +45,6 @@
     </p>
   </div>
 
-  <!-- Resultado da busca - Contador -->
   <div *ngIf="!carregando && !erro && conteudosFiltrados.length > 0" 
        role="status" 
        aria-live="polite"
@@ -60,40 +55,35 @@
     </small>
   </div>
 
-  <!-- Cards -->
-  <div class="row" role="article" *ngFor="let item of conteudosFiltrados; let idx = index"
-       [attr.aria-label]="item.titulo"
-       [attr.aria-description]="'Categoria: ' + item.categoria + '. Autor: ' + item.autor"
+  <div class="row" role="listitem" *ngFor="let item of conteudosFiltrados; let idx = index"
        [attr.aria-setsize]="conteudosFiltrados.length"
        [attr.aria-posinset]="idx + 1">
 
     <div class="col s12 m6">
-      <div class="card hoverable" 
-           [attr.id]="'card-' + item.id_conteudo_pk"
-           role="region"
-           [attr.aria-label]="'Card do acervo: ' + item.titulo">
+      <div class="card hoverable" [attr.id]="'card-' + item.id_conteudo_pk">
         <div class="card-image">
 
           <img *ngIf="item.arquivo.endsWith('.png') || item.arquivo.endsWith('.jpg') || item.arquivo.endsWith('.jpeg')"
                [src]="acervoRaw + '/' + item.categoria + '/' + item.arquivo"
-               [attr.alt]="'Imagem do conteúdo: ' + item.titulo">
+               aria-hidden="true">
 
           <video *ngIf="item.arquivo.endsWith('.MP4')"
                  [src]="acervoRaw + '/' + item.categoria + '/' + item.arquivo"
-                 [attr.aria-label]="'Vídeo: ' + item.titulo">
+                 aria-hidden="true">
           </video>
 
           <img *ngIf="item.arquivo.endsWith('.pdf')"
                src="assets/pdf.png"
-               alt="Documento PDF">
+               aria-hidden="true">
 
-          <span class="card-title" aria-hidden="true">{{ item.titulo }}</span>
+          <span class="card-title" [attr.id]="'titulo-' + item.id_conteudo_pk">
+            {{ limparTextoAssistivo(item.titulo) }}
+          </span>
 
-          <button [routerLink]="['/detalhes-component/', item.id_conteudo_pk]"
+          <button type="button" [routerLink]="['/detalhes-component/', item.id_conteudo_pk]"
                   class="btn-floating halfway-fab waves-effect waves-light cyan lighten-1"
-                  [attr.aria-label]="'Ver detalhes e informações completas sobre ' + item.titulo"
-                  type="button"
-                  [attr.aria-describedby]="'card-' + item.id_conteudo_pk">
+                  aria-label="Ir para detalhes"
+                  [attr.aria-describedby]="'titulo-' + item.id_conteudo_pk">
             <i class="material-icons" aria-hidden="true">add</i>
           </button>
         </div>
@@ -101,18 +91,17 @@
         <div class="card-content">
           <p><strong>Autor: {{ item.autor }}</strong></p>
           <p>Categoria: {{ item.categoria }}</p>
-          <small [attr.aria-label]="'Identificador do conteúdo: ' + item.id_conteudo_pk">ID: {{ item.id_conteudo_pk }}</small>
+          <small aria-hidden="true">ID: {{ item.id_conteudo_pk }}</small>
         </div>
 
         <button type="button"
                 class="btn light-green lighten-1 waves-effect waves-light"
-                [attr.aria-label]="'Abrir chatbot para obter informações sobre ' + item.titulo"
-                [attr.aria-describedby]="'desc-' + item.id_conteudo_pk"
+                aria-label="Abrir chatbot sobre {{ limparTextoAssistivo(item.titulo) }}"
                 (click)="chatbot.open()">
           <i class="material-icons left" aria-hidden="true">chat</i> ChatBot
         </button>
 
-        <app-chatbot #chatbot [idConteudo]="item.id_conteudo_pk" [titulo]="item.titulo" 
+        <app-chatbot #chatbot [idConteudo]="item.id_conteudo_pk" [titulo]="limparTextoAssistivo(item.titulo)" 
                      [attr.id]="'desc-' + item.id_conteudo_pk" />
       </div>
     </div>

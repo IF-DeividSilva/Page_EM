@@ -64,5 +64,24 @@ ngOnInit() {
     this.isPlaying = !this.isPlaying;
   }
 
+  // Função para remover quebras de linha e sujeiras do banco de dados
+  limparTextoAssistivo(texto: string): string {
+    if (!texto) return '';
+    
+    // 1. Remove qualquer tag HTML (tipo <br> ou <b>) que possa estar escondida no banco
+    let textoLimpo = texto.replace(/<[^>]*>?/gm, '');
+    
+    // 2. Troca múltiplos espaços, Tabs e Enters por um único espaço
+    textoLimpo = textoLimpo.replace(/\s+/g, ' ').trim();
+    
+    // 3. O Pulo do Gato: Se o título for gigantesco, a gente corta ele. 
+    // O TalkBack não precisa ler 200 caracteres no botão, ele só precisa saber do que se trata.
+    if (textoLimpo.length > 60) {
+      return textoLimpo.substring(0, 60) + '...';
+    }
+    
+    return textoLimpo;
+  }
+
   
 }
