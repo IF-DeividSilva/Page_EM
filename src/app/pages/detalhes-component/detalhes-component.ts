@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -8,11 +8,16 @@ import { AccessibilityComponent } from '../../components/accessibility-component
 
 @Component({
   selector: 'app-detalhes-component',
-  imports: [RouterLink, CommonModule , TextFieldModule, AccessibilityComponent],
+  standalone: true, // Adicionado caso esteja usando standalone components
+  imports: [RouterLink, CommonModule, TextFieldModule, AccessibilityComponent],
   templateUrl: './detalhes-component.html',
   styleUrl: './detalhes-component.css'
 })
-export class DetalhesComponent implements OnInit, OnDestroy {
+// 1. Adicionamos o AfterViewInit aqui na assinatura da classe
+export class DetalhesComponent implements OnInit, OnDestroy, AfterViewInit {
+  
+  // 2. Capturamos o H1 lá do HTML (lembra do #tituloItem ?)
+  @ViewChild('tituloItem') tituloElement!: ElementRef;
 
   constructor(private route: ActivatedRoute, private acervoService: AcervoService, private sanitizer: DomSanitizer) {}
 
@@ -27,7 +32,21 @@ export class DetalhesComponent implements OnInit, OnDestroy {
 
     this.acervoService.getConteudo(this.itemId).subscribe(dados => {
       this.conteudoDetalhado = dados;
+      
+      // 3. O Pulo do Gato Assíncrono! 
+      // Esperamos os dados chegarem, damos 100ms pro Angular atualizar o H1 na tela, e puxamos o foco!
+      setTimeout(() => {
+        if (this.tituloElement) {
+          this.tituloElement.nativeElement.focus();
+        }
+      }, 100);
     });
+  }
+
+  // O Angular exige que a função exista se você assina o AfterViewInit, 
+  // mesmo que a gente tenha usado a lógica lá no ngOnInit
+  ngAfterViewInit(): void {
+    // Mantemos vazio pois o foco foi movido estrategicamente para dentro do subscribe
   }
 
   get audioUrl(): string {
@@ -56,7 +75,7 @@ export class DetalhesComponent implements OnInit, OnDestroy {
 
   obterUrlPDFViewer(): SafeResourceUrl {
     if (!this.conteudoDetalhado?.arquivo) return this.sanitizer.bypassSecurityTrustResourceUrl('');
-    const pdfUrl = `${this.baseRaw}/${this.conteudoDetalhado.arquivo}`;
+    const pdfUrl = `${this.baseRaw}/${this.conteudoDetalhado.categoria}/${this.conteudoDetalhado.arquivo}`; // Notei que faltava a categoria na URL do PDF, adicionei aqui por precaução!
     // Usar Google Docs Viewer para melhor visualização
     const viewerUrl = `https://docs.google.com/gview?url=${encodeURIComponent(pdfUrl)}&embedded=true`;
     return this.sanitizer.bypassSecurityTrustResourceUrl(viewerUrl);
