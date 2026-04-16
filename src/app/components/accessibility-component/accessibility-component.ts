@@ -1,21 +1,12 @@
 import { Component, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
 import { AccessibilityService } from '../../services/accessibility-service';
 
+// 1. Limpeza do Mapa! Removemos o tabindex="0" indiscriminado e regras conflitantes 
+// que não devem ser aplicadas a containers de texto.
 const WCAG_ATRIBUTOS_MAP: Record<string, Record<string, string>> = {
   'Audiodescricao para video':                  { role: 'region', 'aria-label': 'Vídeo com audiodescrição' },
   'Controle de audio':                          { 'aria-label': 'Controles de áudio' },
-  'Semantica de botao':                         { role: 'button' },
-  'Proposito do botao':                         { 'aria-label': 'Botão de ação' },
-  'Area de acionamento minima':                 { 'aria-label': 'Área clicável' },
-  'Controles com retorno':                      { 'aria-live': 'polite' },
   'Semantica de cabecalho':                     { role: 'heading', 'aria-level': '2' },
-  'Texto alternativo para imagens de conteudo': { role: 'img', 'aria-label': 'Imagem do conteúdo' },
-  'Indicador de foco visivel':                  { tabindex: '0' },
-  'Ordem de foco previsivel':                   { tabindex: '0' },
-  'Uso de foco':                                { tabindex: '0' },
-  'Proposito do link no contexto':              { role: 'link', 'aria-label': 'Link de navegação' },
-  'Links para sites externos':                  { 'aria-label': 'Abre em nova aba' },
-  'Semantica de regiao':                        { role: 'region', 'aria-label': 'Região de conteúdo' },
   'Mensagens de status':                        { role: 'status', 'aria-live': 'polite' },
 };
 
@@ -34,13 +25,14 @@ const CAMPOS = [
 
 @Component({
   selector: 'app-accessibility',
+  standalone: true, // Se o seu projeto usar standalone
   template: ''
 })
 export class AccessibilityComponent implements OnInit {
 
   @Input() idConteudo!: number;
   @Input() elementoAlvo!: HTMLElement;
-  @Input() conteudo!: any; // recebe o conteudoDetalhado completo
+  @Input() conteudo!: any; 
 
   constructor(
     private renderer: Renderer2,
@@ -48,12 +40,11 @@ export class AccessibilityComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    
     if (!this.idConteudo || !this.elementoAlvo) return;
 
     this.accessibilityService.obterCriterios(this.idConteudo).subscribe(criterios => {
 
-      // 1. injeta atributos ARIA no container
+      // Injeta atributos ARIA no container
       criterios.forEach(criterio => {
         const atributos = WCAG_ATRIBUTOS_MAP[criterio.subcategoria];
         if (!atributos) return;
@@ -63,45 +54,40 @@ export class AccessibilityComponent implements OnInit {
         });
       });
 
-      // 2. cria e injeta os campos dinamicamente
+      const botao = this.elementoAlvo.querySelector('button');
+
+      // 2. A MÁGICA: Renderizando Parágrafos Semânticos no lugar de TextAreas
       CAMPOS.forEach(campo => {
         const valor = this.conteudo?.[campo.chave];
-          console.log(`Campo: ${campo.chave} | Valor: ${valor}`); // ← verifica o que chega
-
-        if (valor == null) return;
-
-        // label
-        const label = this.renderer.createElement('label');
-        this.renderer.setProperty(label, 'textContent', `${campo.label}:`);
-        this.renderer.setAttribute(label, 'for', campo.chave);
-
-        // textarea
-        const textarea = this.renderer.createElement('textarea');
-        this.renderer.setAttribute(textarea, 'id', campo.chave);
-        this.renderer.setAttribute(textarea, 'readonly', 'true');
-        this.renderer.setAttribute(textarea, 'aria-label', campo.label);
-        this.renderer.setProperty(textarea, 'value', String(valor));
-        this.renderer.setStyle(textarea, 'overflow', 'hidden');
-        this.renderer.setStyle(textarea, 'resize', 'none');
-        // pega o botão que já está no container
-        const botao = this.elementoAlvo.querySelector('button');
         
-        // aplica CSS WCAG se houver (ex: espaçamento)
+        // Verifica se tem conteúdo e se não está vazio
+        if (valor == null || valor.toString().trim() === '') return;
+
+        // Cria a tag <p>
+        const p = this.renderer.createElement('p');
+        
+        // Cria a tag <strong> para o Label (Ex: "Autor:")
+        const strong = this.renderer.createElement('strong');
+        this.renderer.setProperty(strong, 'textContent', `${campo.label}: `);
+        
+        // Cria o nó de texto com o valor do banco de dados
+        const textNode = this.renderer.createText(String(valor));
+
+        // Junta tudo: <p><strong>Label: </strong> Valor</p>
+        this.renderer.appendChild(p, strong);
+        this.renderer.appendChild(p, textNode);
+
+        // Aplica CSS WCAG (ex: espaçamento) diretamente no parágrafo
         criterios.forEach(criterio => {
           const estilos = WCAG_CSS_MAP[criterio.subcategoria];
           if (!estilos) return;
           Object.entries(estilos).forEach(([prop, val]) => {
-            this.renderer.setStyle(textarea, prop, val);
+            this.renderer.setStyle(p, prop, val);
           });
         });
 
-        // auto-resize após renderizar
-        setTimeout(() => {
-          textarea.style.height = textarea.scrollHeight + 'px';
-        });
-
-        this.renderer.insertBefore(this.elementoAlvo, label, botao);
-        this.renderer.insertBefore(this.elementoAlvo, textarea, botao);
+        // Insere na tela antes do botão
+        this.renderer.insertBefore(this.elementoAlvo, p, botao);
       });
     });
   }

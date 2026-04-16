@@ -33,13 +33,12 @@ export class DetalhesComponent implements OnInit, OnDestroy, AfterViewInit {
     this.acervoService.getConteudo(this.itemId).subscribe(dados => {
       this.conteudoDetalhado = dados;
       
-      // 3. O Pulo do Gato Assíncrono! 
-      // Esperamos os dados chegarem, damos 100ms pro Angular atualizar o H1 na tela, e puxamos o foco!
+      // Espera os dados chegarem, dando 500ms pro Angular atualizar o H1 na tela, e puxa o foco!
       setTimeout(() => {
         if (this.tituloElement) {
           this.tituloElement.nativeElement.focus();
         }
-      }, 100);
+      }, 500);
     });
   }
 
