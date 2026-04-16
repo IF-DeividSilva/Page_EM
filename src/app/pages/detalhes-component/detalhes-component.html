@@ -1,24 +1,4 @@
-<h1 #tituloItem tabindex="-1" style="outline: none;">
-    {{ conteudoDetalhado?.titulo || 'Detalhes do Conteúdo' }}
-</h1>
-
-<div class="midia-container" *ngIf="conteudoDetalhado?.arquivo">
-    
-    <div *ngIf="isImagem()" class="midia-wrapper" aria-hidden="true">
-        <img [src]="obterUrlArquivo()" [alt]="conteudoDetalhado.titulo" class="midia-img">
-    </div>
-    
-    <div *ngIf="isPDF()" class="midia-wrapper" aria-hidden="true">
-        <iframe [src]="obterUrlPDFViewer()" class="midia-pdf"></iframe>
-    </div>
-    
-    <div *ngIf="isVideo()" class="midia-wrapper">
-        <video controls class="midia-video" aria-label="Reprodutor de vídeo: {{ conteudoDetalhado.titulo }}">
-            <source [src]="obterUrlArquivo()" type="video/mp4">
-            Seu navegador não suporta vídeo.
-        </video>
-    </div>
-</div>
+<h1>Detalhes do Conteúdo</h1>
 
 <main *ngIf="conteudoDetalhado"> 
     <div #conteudoRef class="conteudo-d">
@@ -30,11 +10,26 @@
 
         <button type="button" 
                 class="btn waves-effect waves-light"
-                aria-label="Reproduzir áudio"
-                aria-description="Inicia a reprodução do arquivo de áudio atual. Pressione novamente para pausar."
-                [attr.aria-pressed]="reproduzindo"
+                aria-label="{{ reproduzindo ? 'Pausar áudio' : 'Reproduzir áudio' }}"
                 (click)="toggleReproducao()">
             <i class="material-icons" aria-hidden="true">{{ reproduzindo ? 'pause' : 'play_arrow' }}</i>
         </button>
     </div>
 </main>
+
+<div class="midia-container" *ngIf="conteudoDetalhado?.arquivo" role="region" aria-label="Seção de mídia do conteúdo na integra">
+    <div *ngIf="isImagem()" class="midia-wrapper" role="img" [attr.aria-label]="conteudoDetalhado.titulo">
+        <img [src]="obterUrlArquivo()" [alt]="conteudoDetalhado.titulo" class="midia-img">
+    </div>
+    
+    <div *ngIf="isPDF()" class="midia-wrapper">
+        <iframe [src]="obterUrlPDFViewer()" class="midia-pdf" role="document" aria-label="Visualizador de PDF"></iframe>
+    </div>
+    
+    <div *ngIf="isVideo()" class="midia-wrapper">
+        <video controls class="midia-video" role="video" aria-label="Reprodutor de vídeo">
+            <source [src]="obterUrlArquivo()" type="video/mp4">
+            Seu navegador não suporta vídeo.
+        </video>
+    </div>
+</div>

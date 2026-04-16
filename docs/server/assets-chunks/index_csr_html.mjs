@@ -14,5 +14,5 @@ export default `<!doctype html>
 <link rel="stylesheet" href="styles-5INURTSO.css"></head>
 <body ngcm="">
   <app-root></app-root>
-<script src="main-LXM2H653.js" type="module"></script></body>
+<script src="main-DCHGJZXI.js" type="module"></script></body>
 </html>`;
