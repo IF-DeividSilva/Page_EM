@@ -28,12 +28,12 @@ export default {
 ],
   entryPointToBrowserMapping: undefined,
   assets: {
-    'index.csr.html': {size: 1339, hash: 'd9905ede4726ebbcd94a0071f12be858b01d19a2a8b9dfd7c29468c244cc0b8a', text: () => import('./assets-chunks/index_csr_html.mjs').then(m => m.default)},
-    'index.server.html': {size: 1852, hash: '87534300a0e635b8d1a4c949db644be88cd321d3ed554e4ee6d1f85087409c13', text: () => import('./assets-chunks/index_server_html.mjs').then(m => m.default)},
-    'sobre-component/index.html': {size: 10700, hash: 'd1dd7132feedbe53c9b6d1e3337aa7e2834c973498e20035410d94ab33c24ca3', text: () => import('./assets-chunks/sobre-component_index_html.mjs').then(m => m.default)},
-    'index.html': {size: 8564, hash: '9492d8086b8bcb7c58d35050498af10580081ceb61541a5734a4e0e9a2c9dfa4', text: () => import('./assets-chunks/index_html.mjs').then(m => m.default)},
-    'visite-nos-component/index.html': {size: 8169, hash: '8e6168467514f0c42fa2fb3160f58e903f975980c66078eaf9955da94198325f', text: () => import('./assets-chunks/visite-nos-component_index_html.mjs').then(m => m.default)},
-    'acervo-component/index.html': {size: 27142, hash: '42022b7137d0d01b32fda593f45e292d0847ea23285b772a783de0d26f75edf3', text: () => import('./assets-chunks/acervo-component_index_html.mjs').then(m => m.default)},
+    'index.csr.html': {size: 1339, hash: 'b533ec00e2c44b99530575045323ec80f3dee5468ca7e0bebcc02171fd786a28', text: () => import('./assets-chunks/index_csr_html.mjs').then(m => m.default)},
+    'index.server.html': {size: 1852, hash: 'bd1d09fe92e2a791ea7384b213df7d15cafff95c321ccde17fc739ab3932729e', text: () => import('./assets-chunks/index_server_html.mjs').then(m => m.default)},
+    'index.html': {size: 10840, hash: '93e7b78c73337366cc5fefce2102887c2bc7642384b152ee2550e38083089472', text: () => import('./assets-chunks/index_html.mjs').then(m => m.default)},
+    'visite-nos-component/index.html': {size: 8609, hash: '537645fb93a719d3af292a205b20fcfa2cdcd3dd64806c8c9119b9af0869eca1', text: () => import('./assets-chunks/visite-nos-component_index_html.mjs').then(m => m.default)},
+    'sobre-component/index.html': {size: 10860, hash: '69e6b1f1affc42b45642d364cdbebc5d3971a0fc8ae48e710e9242ca1f5aa8f1', text: () => import('./assets-chunks/sobre-component_index_html.mjs').then(m => m.default)},
+    'acervo-component/index.html': {size: 28832, hash: 'e2aeb1ef1e9216c17cd05382c20b81936d58cbe10f4b7f6e96b2ebf908bbab7f', text: () => import('./assets-chunks/acervo-component_index_html.mjs').then(m => m.default)},
     'styles-5INURTSO.css': {size: 0, hash: 'menYUTfbRu8', text: () => import('./assets-chunks/styles-5INURTSO_css.mjs').then(m => m.default)}
   },
 };

@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 
 
 import { SobreComponent } from './pages/sobre-component/sobre-component';
-import { LandPageComponent } from './pages/land-page-component/land-page-component';
 import { AcervoComponent } from './pages/acervo-component/acervo-component';
 import { DetalhesComponent } from './pages/detalhes-component/detalhes-component';
 import { VisiteNosComponent } from './pages/visite-nos-component/visite-nos-component';
@@ -10,7 +9,7 @@ import { VisiteNosComponent } from './pages/visite-nos-component/visite-nos-comp
 
 
 export const routes: Routes = [
-   {path:'', component: LandPageComponent},
+   {path:'', component: SobreComponent},
    {path: 'sobre-component', component: SobreComponent},
    {path: 'acervo-component', component: AcervoComponent},
    {path: 'detalhes-component/:id', component: DetalhesComponent},

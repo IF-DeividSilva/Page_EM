@@ -2,13 +2,14 @@ import { Component, PLATFORM_ID, inject, afterNextRender } from '@angular/core';
 import { RouterLink, Router, NavigationEnd } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
 import { filter } from 'rxjs/operators';
+import { A11yModule } from '@angular/cdk/a11y';
 
 declare var M: any;
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, A11yModule],
   templateUrl: './navbar-component.html', 
   styleUrls: ['./navbar-component.css']
 
@@ -75,6 +76,14 @@ export class NavbarComponent {
               links.forEach(link => link.removeAttribute('tabindex'));
               const firstLink = sidenavElement.querySelector('a');
               setTimeout(() => (firstLink as HTMLElement)?.focus(), 100);
+              
+              // CERTO: Travar foco na tag MAIN e no FOOTER de verdade
+              const main = document.querySelector('main');
+              const footer = document.querySelector('footer');
+              const navbar = document.querySelector('nav');
+              if (navbar) (navbar as HTMLElement).setAttribute('inert', '');
+              if (main) (main as HTMLElement).setAttribute('inert', '');
+              if (footer) (footer as HTMLElement).setAttribute('inert', '');
             },
 
             onCloseEnd: () => {
@@ -82,6 +91,14 @@ export class NavbarComponent {
               trigger?.setAttribute('aria-expanded', 'false');
               const links = sidenavElement.querySelectorAll('a');
               links.forEach(link => link.setAttribute('tabindex', '-1'));
+              
+              // CERTO: Liberar foco da tag MAIN e do FOOTER
+              const main = document.querySelector('main');
+              const footer = document.querySelector('footer');
+              const navbar = document.querySelector('nav');
+              if (navbar) (navbar as HTMLElement).removeAttribute('inert');
+              if (main) (main as HTMLElement).removeAttribute('inert');
+              if (footer) (footer as HTMLElement).removeAttribute('inert');
             }
           });
 

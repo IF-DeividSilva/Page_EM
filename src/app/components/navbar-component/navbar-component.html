@@ -1,6 +1,6 @@
 <nav class="cyan lighten-1">
   <div class="nav-wrapper container">
-    <a routerLink="/" class="brand-logo" tabindex="1">
+    <a routerLink="/" class="brand-logo" >
       <img src="assets/logo-ecomuseu.png" alt="Logo do Ecomuseu do Boné" class="logo responsive-img" style="height: 50px; margin-top: 8px;">
       <span style="vertical-align: top; margin-left: 15px; font-size: 1.8rem; color: black;">EcoMuseu do Boné</span>
     </a>
@@ -14,17 +14,15 @@
 
     <!-- Menu desktop -->
     <ul class="right hide-on-med-and-down">
-      <li><a routerLink="/pagina1-component" routerLinkActive="active" style="color: black;">Sobre</a></li>
+      <li><a routerLink="/sobre-component" routerLinkActive="active" style="color: black;">Sobre</a></li>
       <li><a routerLink="/acervo-component" style="color: black;">Acervo</a></li>
-      <li><a routerLink="/visita" style="color: black;">Visite-nos</a></li>
+      <li><a routerLink="/visite-nos-component" style="color: black;">Visite-nos</a></li>
     </ul>
   </div>
 </nav>
 
 <!-- Menu mobile (sidenav) -->
-<ul class="sidenav" id="mobile-nav" aria-label="Menu mobile" >
-  <li><a routerLink="/" class="sidenav-close"
-         [attr.aria-current]="router.isActive('/', true) ? 'page' : null">Início</a></li>
+<ul class="sidenav" id="mobile-nav" aria-label="Menu mobile" cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
   <li><a routerLink="/sobre-component" routerLinkActive="active" class="sidenav-close"
          [attr.aria-current]="router.isActive('/sobre-component', true) ? 'page' : null">Sobre</a></li>
   <li><a routerLink="/acervo-component" class="sidenav-close"

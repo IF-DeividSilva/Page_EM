@@ -56,7 +56,7 @@ export class AccessibilityComponent implements OnInit {
 
       const botao = this.elementoAlvo.querySelector('button');
 
-      // 2. A MÁGICA: Renderizando Parágrafos Semânticos no lugar de TextAreas
+      //  Renderizando Parágrafos Semânticos no lugar de TextAreas
       CAMPOS.forEach(campo => {
         const valor = this.conteudo?.[campo.chave];
         

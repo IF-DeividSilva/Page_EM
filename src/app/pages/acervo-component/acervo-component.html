@@ -1,109 +1,150 @@
-<div id="acervo" role="list" aria-label="Acervo do EcoMuseu do Boné" [attr.aria-busy]="carregando">
+<main> 
+  <h1> Acervo do EcoMuseu do Boné </h1>
+  <div id="acervo" [attr.aria-busy]="carregando">
 
-  <div *ngIf="carregando" role="status" aria-live="polite">
-    <p>Carregando acervo...</p>
-  </div>
+    <div *ngIf="carregando" role="status" aria-live="polite">
+      <p>Carregando acervo...</p>
+    </div>
 
-  <div *ngIf="erro" role="alert" aria-live="assertive">
-    <p>Erro ao carregar os dados.</p>
-  </div>
+    <div *ngIf="erro" role="alert" aria-live="assertive">
+      <p>Erro ao carregar os dados.</p>
+    </div>
 
-  <div class="row" *ngIf="!carregando && !erro" role="search" aria-label="Seção de busca do acervo">
-    <div class="col s12 m6 l5">
-      <div class="input-field">
-        <input id="busca-acervo" 
-               type="text" 
-               [(ngModel)]="termoBusca" 
-               placeholder="Buscar pelo título..." 
-               aria-label="Campo de busca"
-               aria-describedby="busca-descricao"
-               [attr.aria-invalid]="termoBusca && conteudosFiltrados.length === 0"
-               autocomplete="off">
-        <label for="busca-acervo">Buscar no acervo</label>
-        <small id="busca-descricao" class="grey-text">Digite o título para filtrar os itens</small>
+    <div class="row" role="search" aria-label="Campo de busca no acervo">
+      <div class="col s12 m6 l5">
+        <div class="input-field">
+          <input id="busca-acervo" 
+                type="text" 
+                [ngModel]="termoBusca" 
+                (ngModelChange)="onSearchChange($event)"
+                autocomplete="off">
+          <label for="busca-acervo">Buscar no acervo</label>
+        </div>
+      </div>
+
+
+    <div class="col s2 m2 l1" *ngIf="termoBusca">
+        <button (click)="termoBusca = ''" 
+                type="button"
+                class="btn-flat waves-effect waves-light red-text"
+                aria-label="Limpar campo de busca"
+                style="margin-top: 25px;">
+          <i class="material-icons" aria-hidden="true">clear</i>
+        </button>
       </div>
     </div>
-    <div class="col s2 m2 l1" *ngIf="termoBusca">
-      <button (click)="termoBusca = ''" 
-              type="button"
-              class="btn-flat waves-effect waves-light red-text"
-              aria-label="Limpar campo de busca"
-              aria-pressed="false"
-              style="margin-top: 25px;">
-        <i class="material-icons" aria-hidden="true">clear</i>
-      </button>
+
+    <div *ngIf="!carregando && !erro && conteudosFiltrados.length === 0 && termoBusca" 
+        class="center" aria-hidden="true">
+      <p class="grey-text text-darken-1">
+        Nenhum item encontrado para: "{{ termoBusca }}"
+      </p>
     </div>
-  </div>
 
-  <div *ngIf="!carregando && !erro && conteudosFiltrados.length === 0 && termoBusca" 
-       role="status" 
-       aria-live="polite" 
-       aria-atomic="true"
-       class="center">
-    <p class="grey-text text-darken-1" aria-label="Mensagem de nenhum resultado">
-      Nenhum item encontrado para: "{{ termoBusca }}"
-    </p>
-  </div>
+    <div *ngIf="!carregando && !erro && conteudosFiltrados.length > 0" 
+        class="center" 
+        style="margin: 10px 0;" aria-hidden="true">
+      <small class="grey-text">
+        {{ conteudosPaginados.length }} de {{ conteudosFiltrados.length }} item(ns)
+      </small>
+    </div>
 
-  <div *ngIf="!carregando && !erro && conteudosFiltrados.length > 0" 
-       role="status" 
-       aria-live="polite"
-       class="center" 
-       style="margin: 10px 0;">
-    <small class="grey-text" [attr.aria-label]="'Encontrados ' + conteudosFiltrados.length + ' item(ns)'">
-      {{ conteudosFiltrados.length }} de {{ conteudos.length }} item
-    </small>
-  </div>
 
-  <div class="row" role="listitem" *ngFor="let item of conteudosFiltrados; let idx = index"
-       [attr.aria-setsize]="conteudosFiltrados.length"
-       [attr.aria-posinset]="idx + 1">
+    <div role="list" aria-label="Resultados do acervo" #cardSection tabindex="0">
+      <div class="row" role="listitem" *ngFor="let item of conteudosPaginados; let idx = index"
+          [attr.aria-setsize]="conteudosFiltrados.length"
+          [attr.aria-posinset]="((paginaAtual - 1) * itensPorPagina) + idx + 1">
 
-    <div class="col s12 m6">
-      <div class="card hoverable" [attr.id]="'card-' + item.id_conteudo_pk">
-        <div class="card-image">
+        <div class="col s12 m6">
+          <div class="card hoverable" [attr.id]="'card-' + item.id_conteudo_pk">
+            <div class="card-image">
 
-          <img *ngIf="item.arquivo.endsWith('.png') || item.arquivo.endsWith('.jpg') || item.arquivo.endsWith('.jpeg')"
-               [src]="acervoRaw + '/' + item.categoria + '/' + item.arquivo"
-               aria-hidden="true">
+              <img *ngIf="item.arquivo.endsWith('.png') || item.arquivo.endsWith('.jpg') || item.arquivo.endsWith('.jpeg')"
+                  [src]="acervoRaw + '/' + item.categoria + '/' + item.arquivo"
+                  aria-hidden="true">
 
-          <video *ngIf="item.arquivo.endsWith('.MP4')"
-                 [src]="acervoRaw + '/' + item.categoria + '/' + item.arquivo"
-                 aria-hidden="true">
-          </video>
+              <video *ngIf="item.arquivo.endsWith('.MP4')"
+                    [src]="acervoRaw + '/' + item.categoria + '/' + item.arquivo"
+                    aria-hidden="true">
+              </video>
 
-          <img *ngIf="item.arquivo.endsWith('.pdf')"
-               src="assets/pdf.png"
-               aria-hidden="true">
+              <img *ngIf="item.arquivo.endsWith('.pdf')"
+                  src="assets/pdf.png"
+                  aria-hidden="true">
 
-          <span class="card-title" [attr.id]="'titulo-' + item.id_conteudo_pk">
-            {{ limparTextoAssistivo(item.titulo) }}
-          </span>
+              <h2 class="card-title" [attr.id]="'titulo-' + item.id_conteudo_pk" style="margin: 0;">
+                {{ limparTextoAssistivo(item.titulo) }}
+              </h2>
 
-          <button type="button" [routerLink]="['/detalhes-component/', item.id_conteudo_pk]"
-                  class="btn-floating halfway-fab waves-effect waves-light cyan lighten-1"
-                  aria-label="Ir para detalhes"
-                  [attr.aria-describedby]="'titulo-' + item.id_conteudo_pk">
-            <i class="material-icons" aria-hidden="true">add</i>
-          </button>
-        </div>
+              <button type="button" [routerLink]="['/detalhes-component/', item.id_conteudo_pk]"
+                      class="btn-floating halfway-fab waves-effect waves-light cyan lighten-1"
+                      aria-label="Ir para detalhes"
+                      [attr.aria-describedby]="'titulo-' + item.id_conteudo_pk">
+                <i class="material-icons" aria-hidden="true">add</i>
+              </button>
+            </div>
 
-        <div class="card-content">
-          <p><strong>Autor: {{ item.autor }}</strong></p>
-          <p>Categoria: {{ item.categoria }}</p>
-          <small aria-hidden="true">ID: {{ item.id_conteudo_pk }}</small>
-        </div>
+            <div class="card-content">
+              <p><strong>Autor: {{ item.autor }}</strong></p>
+              <p>Categoria: {{ item.categoria }}</p>
+              <small aria-hidden="true">ID: {{ item.id_conteudo_pk }}</small>
+            </div>
 
+            <button type="button"
+                    class="btn light-green lighten-1 waves-effect waves-light"
+                    aria-label="Abrir chatbot sobre {{ limparTextoAssistivo(item.titulo) }}"
+                    (click)="chatbot.open()">
+              <i class="material-icons left" aria-hidden="true">chat</i> ChatBot
+            </button>
+
+            <app-chatbot #chatbot [idConteudo]="item.id_conteudo_pk" [titulo]="limparTextoAssistivo(item.titulo)" 
+                        [attr.id]="'desc-' + item.id_conteudo_pk" />
+          </div>
+      </div>
+    </div>
+
+    <!-- Controles de Paginação -->
+    <div *ngIf="!carregando && !erro && totalPaginas > 1" class="pagination-container" role="navigation" aria-label="Paginação">
+      <div class="center" style="margin: 30px 0; padding: 20px;">
+        <!-- Botão Anterior -->
         <button type="button"
-                class="btn light-green lighten-1 waves-effect waves-light"
-                aria-label="Abrir chatbot sobre {{ limparTextoAssistivo(item.titulo) }}"
-                (click)="chatbot.open()">
-          <i class="material-icons left" aria-hidden="true">chat</i> ChatBot
+                class="btn waves-effect waves-light"
+                (click)="irParaPagina(paginaAtual - 1)"
+                [disabled]="paginaAtual === 1"
+                aria-label="Página anterior">
+          <i class="material-icons left" aria-hidden="true">chevron_left</i>
+          Anterior
         </button>
 
-        <app-chatbot #chatbot [idConteudo]="item.id_conteudo_pk" [titulo]="limparTextoAssistivo(item.titulo)" 
-                     [attr.id]="'desc-' + item.id_conteudo_pk" />
+        <!-- Números de página -->
+        <span style="margin: 0 10px; font-weight: bold;">
+          <button type="button"
+                  *ngFor="let pagina of numeroPaginas"
+                  class="pagination-btn"
+                  [class.active]="pagina === paginaAtual"
+                  (click)="irParaPagina(pagina)"
+                  [attr.aria-label]="'Página ' + pagina"
+                  [attr.aria-current]="pagina === paginaAtual ? 'page' : null">
+            {{ pagina }}
+          </button>
+        </span>
+
+        <!-- Botão Próximo -->
+        <button type="button"
+                class="btn waves-effect waves-light"
+                (click)="irParaPagina(paginaAtual + 1)"
+                [disabled]="paginaAtual === totalPaginas"
+                aria-label="Próxima página">
+          Próximo
+          <i class="material-icons right" aria-hidden="true">chevron_right</i>
+        </button>
+
+        <!-- Informação de página -->
+        <div style="margin-top: 10px; font-size: 0.9rem; color: #666;">
+          <span aria-live="polite">Página {{ paginaAtual }} de {{ totalPaginas }}</span>
+        </div>
       </div>
     </div>
+    </div>
   </div>
-</div>
+</main>

@@ -18,12 +18,15 @@ export class DetalhesComponent implements OnInit, OnDestroy, AfterViewInit {
   
   // 2. Capturamos o H1 lá do HTML (lembra do #tituloItem ?)
   @ViewChild('tituloItem') tituloElement!: ElementRef;
+  @ViewChild('videoElement') videoElement!: ElementRef<HTMLVideoElement>;
 
   constructor(private route: ActivatedRoute, private acervoService: AcervoService, private sanitizer: DomSanitizer) {}
 
   itemId: number | null = null;
   conteudoDetalhado: any;
   reproduzindo = false;
+  reproduzindoVideo = false;
+  volumeVideo = 1;
   private reproducao: HTMLAudioElement | null = null;
   private readonly baseRaw = 'https://raw.githubusercontent.com/IF-DeividSilva/acervo-ecomuseu/main/Dados';
 
@@ -94,6 +97,38 @@ export class DetalhesComponent implements OnInit, OnDestroy, AfterViewInit {
     } else {
       this.reproducao.play();
       this.reproduzindo = true;
+    }
+  }
+
+  toggleReproducaoVideo() {
+    if (!this.videoElement) return;
+    
+    const video = this.videoElement.nativeElement;
+    if (this.reproduzindoVideo) {
+      video.pause();
+      this.reproduzindoVideo = false;
+    } else {
+      video.play();
+      this.reproduzindoVideo = true;
+    }
+  }
+
+  atualizarVolumeVideo(valor: number) {
+    if (!this.videoElement) return;
+    this.volumeVideo = valor;
+    this.videoElement.nativeElement.volume = valor;
+  }
+
+  toggleFullscreen() {
+    if (!this.videoElement) return;
+    
+    const video = this.videoElement.nativeElement;
+    if (!document.fullscreenElement) {
+      video.requestFullscreen().catch(err => {
+        console.error(`Erro ao tentar fullscreen: ${err.message}`);
+      });
+    } else {
+      document.exitFullscreen();
     }
   }
 
