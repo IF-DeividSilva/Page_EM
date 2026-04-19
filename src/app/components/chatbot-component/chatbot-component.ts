@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { ChatbotService } from './chatbot-service';
 // para o git pages atualizar as respostas do cbot
 import { ChangeDetectorRef } from '@angular/core';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
 declare const M: any;
 
 interface Mensagem {
@@ -23,7 +24,11 @@ interface Mensagem {
 })
 
 export class ChatbotComponent implements OnInit, OnDestroy, AfterViewChecked {
-  constructor(private chatbotService: ChatbotService, private cdr: ChangeDetectorRef) {}
+  constructor(
+    private chatbotService: ChatbotService, 
+    private cdr: ChangeDetectorRef,
+    private liveAnnouncer: LiveAnnouncer
+  ) {}
 
   @Input() idConteudo!: number;
   @Input() titulo = 'este item';
@@ -42,10 +47,13 @@ export class ChatbotComponent implements OnInit, OnDestroy, AfterViewChecked {
   private shouldScroll = false;
 
   ngOnInit() {
+    const mensagemInicial = `Olá! Posso responder dúvidas sobre o conteúdo "${this.titulo}". O que você quer saber?`;
     this.mensagens.push({
       role: 'assistant',
-      text: `Olá! Posso responder dúvidas sobre o conteúdo "${this.titulo}". O que você quer saber?`,
+      text: mensagemInicial,
     });
+    // Anuncia a mensagem inicial para leitores de tela
+    this.liveAnnouncer.announce(mensagemInicial, 'polite');
 
     this.inicializarMicrofone();
   }
@@ -125,6 +133,9 @@ export class ChatbotComponent implements OnInit, OnDestroy, AfterViewChecked {
     } else {
       this.erroMic = 'Erro ao usar o microfone. Tente novamente.';
     }
+    
+    // Anuncia o erro para leitores de tela
+    this.liveAnnouncer.announce(this.erroMic, 'assertive');
 
     setTimeout(() => { this.erroMic = ''; this.cdr.detectChanges(); }, 4000);
   };
@@ -137,6 +148,7 @@ toggleMic() {
   this.userInput   = '';
   this.erroMic     = '';
   this.isRecording = true;
+  this.liveAnnouncer.announce('Microfone ativado. Fale sua pergunta.', 'assertive');
   this.recognition.start();
   this.cdr.detectChanges();
 }
@@ -166,12 +178,18 @@ erro    = '';
     this.loading      = true;
     this.shouldScroll = true;
     this.cdr.detectChanges();
+    
+    // Anuncia que a pergunta foi enviada
+    this.liveAnnouncer.announce('Sua pergunta foi enviada. Aguardando resposta...', 'polite');
 
     try {
       const resposta = await this.chatbotService.ask(pergunta, this.idConteudo);
       this.mensagens.push({ role: 'assistant', text: resposta });
+      // Anuncia a resposta para leitores de tela
+      this.liveAnnouncer.announce(resposta, 'polite');
     } catch {
       this.erro = 'Não foi possível obter uma resposta. Tente novamente.';
+      this.liveAnnouncer.announce(this.erro, 'assertive');
     } finally {
       this.loading      = false;
       this.shouldScroll = true;

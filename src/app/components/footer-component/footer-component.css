@@ -2,3 +2,11 @@ footer.page-footer {
   width: 100%;
   padding-top: 5px;
 }
+
+footer.page-footer .black-text {
+  color: #000 !important;
+}
+
+footer.page-footer .footer-copyright {
+  color: #000;
+}

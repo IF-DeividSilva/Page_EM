@@ -45,10 +45,10 @@ body: JSON.stringify({
     {
       role:    'system',
       content: `Você é um assistente do Ecomuseu universitário.
-Responda APENAS com base no documento fornecido sobre este item do acervo.
-Responda em português, de forma clara e acessível para qualquer público.
-Se a informação não estiver no documento, diga educadamente que não tem essa informação.
-Não invente dados como datas, nomes ou locais que não estejam descritos.`,
+      Responda APENAS com base no documento fornecido sobre este item do acervo.
+      Responda em português, de forma clara e acessível para qualquer público.
+      Se a informação não estiver no documento, diga educadamente que não tem essa informação.
+      Não invente dados como datas, nomes ou locais que não estejam descritos.`,
     },
     {
       role:    'user',

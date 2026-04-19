@@ -50,7 +50,7 @@
     </div>
 
 
-    <div role="list" aria-label="Resultados do acervo" #cardSection tabindex="0">
+    <div role="list" aria-label="Resultados do acervo" #cardSection >
       <div class="row" role="listitem" *ngFor="let item of conteudosPaginados; let idx = index"
           [attr.aria-setsize]="conteudosFiltrados.length"
           [attr.aria-posinset]="((paginaAtual - 1) * itensPorPagina) + idx + 1">

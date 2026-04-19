@@ -11,12 +11,13 @@
       <a class="modal-close btn-flat white-text btn-fechar waves-effect waves-light">✕</a>
     </div>
 
-    <div class="chatbot-mensagens" #msgContainer>
+    <div class="chatbot-mensagens" #msgContainer role="log" aria-live="polite" aria-label="Histórico de mensagens do chatbot">
       <div
         *ngFor="let msg of mensagens"
         class="bubble"
         [class.bubble-user]="msg.role === 'user'"
         [class.bubble-assistant]="msg.role === 'assistant'"
+        [attr.aria-label]="msg.role === 'user' ? 'Sua mensagem: ' + msg.text : 'Assistente respondeu: ' + msg.text"
       >
         {{ msg.text }}
       </div>
