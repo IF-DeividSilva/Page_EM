@@ -41,10 +41,12 @@ export class ChatbotComponent implements OnInit, OnDestroy, AfterViewChecked {
   isRecording  = false;
   speechOk     = false;         // browser suporta Web Speech API?
   erroMic      = '';            // mensagem de erro do microfone
+  isOpen = false;
 
   private modalInstance: any;
   private recognition:   any;
   private shouldScroll = false;
+
 
   ngOnInit() {
     const mensagemInicial = `Olá! Posso responder dúvidas sobre o conteúdo "${this.titulo}". O que você quer saber?`;
@@ -52,8 +54,6 @@ export class ChatbotComponent implements OnInit, OnDestroy, AfterViewChecked {
       role: 'assistant',
       text: mensagemInicial,
     });
-    // Anuncia a mensagem inicial para leitores de tela
-    this.liveAnnouncer.announce(mensagemInicial, 'polite');
 
     this.inicializarMicrofone();
   }
@@ -158,8 +158,18 @@ toggleMic() {
   // Modal
   // ------------------------------------------------------------------
 
-  open()  { this.modalInstance?.open(); }
-  close() { this.modalInstance?.close(); }
+  open()  { 
+    this.isOpen = true; 
+    this.modalInstance?.open(); 
+
+    const mensagemInicial = this.mensagens[0].text;
+    // Anuncia a mensagem inicial para leitores de tela
+    this.liveAnnouncer.announce(mensagemInicial, 'polite');
+  }
+  close() { 
+    this.modalInstance?.close(); 
+    this.isOpen = false;
+  }
 
   // ------------------------------------------------------------------
   // Envio

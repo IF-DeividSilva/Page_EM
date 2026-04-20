@@ -77,10 +77,10 @@
               </h2>
 
               <button type="button" [routerLink]="['/detalhes-component/', item.id_conteudo_pk]"
-                      class="btn-floating halfway-fab waves-effect waves-light cyan lighten-1"
+                      class="btn-floating halfway-fab waves-effect waves-light cyan lighten-1 "
                       aria-label="Ir para detalhes"
                       [attr.aria-describedby]="'titulo-' + item.id_conteudo_pk">
-                <i class="material-icons" aria-hidden="true">add</i>
+                <i class="material-icons black-text" aria-hidden="true">add</i>
               </button>
             </div>
 
@@ -91,7 +91,7 @@
             </div>
 
             <button type="button"
-                    class="btn light-green lighten-1 waves-effect waves-light"
+                    class="btn light-green lighten-1 waves-effect waves-light black-text"
                     aria-label="Abrir chatbot sobre {{ limparTextoAssistivo(item.titulo) }}"
                     (click)="chatbot.open()">
               <i class="material-icons left" aria-hidden="true">chat</i> ChatBot
@@ -112,8 +112,7 @@
                 (click)="irParaPagina(paginaAtual - 1)"
                 [disabled]="paginaAtual === 1"
                 aria-label="Página anterior">
-          <i class="material-icons left" aria-hidden="true">chevron_left</i>
-          Anterior
+          <i class="material-icons left black-text" aria-hidden="true">chevron_left</i>
         </button>
 
         <!-- Números de página -->
@@ -135,8 +134,7 @@
                 (click)="irParaPagina(paginaAtual + 1)"
                 [disabled]="paginaAtual === totalPaginas"
                 aria-label="Próxima página">
-          Próximo
-          <i class="material-icons right" aria-hidden="true">chevron_right</i>
+          <i class="material-icons right black-text" aria-hidden="true">chevron_right</i>
         </button>
 
         <!-- Informação de página -->
