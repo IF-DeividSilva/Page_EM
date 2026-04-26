@@ -10,10 +10,6 @@ const WCAG_ATRIBUTOS_MAP: Record<string, Record<string, string>> = {
   'Mensagens de status':                        { role: 'status', 'aria-live': 'polite' },
 };
 
-const WCAG_CSS_MAP: Record<string, Record<string, string>> = {
-  'Espacamento entre as letras':   { 'letter-spacing': '0.12em' },
-  'Espacamento entre as palavras': { 'word-spacing': '0.16em' },
-};
 
 const CAMPOS = [
   { label: 'Autor',     chave: 'autor'     },
@@ -77,14 +73,6 @@ export class AccessibilityComponent implements OnInit {
         this.renderer.appendChild(p, strong);
         this.renderer.appendChild(p, textNode);
 
-        // Aplica CSS WCAG (ex: espaçamento) diretamente no parágrafo
-        criterios.forEach(criterio => {
-          const estilos = WCAG_CSS_MAP[criterio.subcategoria];
-          if (!estilos) return;
-          Object.entries(estilos).forEach(([prop, val]) => {
-            this.renderer.setStyle(p, prop, val);
-          });
-        });
 
         // Insere na tela antes do botão
         this.renderer.insertBefore(this.elementoAlvo, p, botao);

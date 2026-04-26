@@ -37,7 +37,7 @@ export class AcervoComponent implements OnInit{
 ngOnInit() {
     this.acervoService.getTodosConteudos().subscribe({
       next: (dados) => {
-        this.conteudos = dados as any[];
+        this.conteudos = (dados as any[]).filter(item => item !== null);
         this.carregando = false;
         document.getElementById('acervo')?.setAttribute('aria-busy', 'false');
       },
