@@ -1,89 +1,99 @@
-<div #modalEl id="chatbot-modal-{{ idConteudo }}" class="modal chatbot-modal" >
-  <ng-container *ngIf="isOpen">
-    <div class="modal-content" style="padding: 0;">
+<!-- Backdrop + modal — só existe no DOM quando isOpen=true -->
+<div
+  *ngIf="isOpen"
+  class="chatbot-modal"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Assistente do Ecomuseu"
+  cdkTrapFocus
+  cdkTrapFocusAutoCapture
+></div>
 
-      <div class="chatbot-header light-green lighten-1 white-text">
-        <div class="header-info">
-          <div>
-            <p class="header-titulo">Assistente do Ecomuseu</p>
-          </div>
-        </div>
-        <a class="modal-close btn-flat white-text btn-fechar waves-effect waves-light">✕</a>
+<div
+  *ngIf="isOpen"
+  class="chatbot-modal"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Assistente do Ecomuseu"
+  cdkTrapFocus
+  cdkTrapFocusAutoCapture
+>
+  <div class="modal-content" style="padding: 0;">
+
+    <div class="chatbot-header light-green lighten-1 white-text">
+      <div class="header-info">
+        <p class="header-titulo">Assistente do Ecomuseu</p>
       </div>
-
-      <div class="chatbot-mensagens" #msgContainer role="log" aria-live="polite" aria-label="Histórico de mensagens do chatbot">
-        <div
-          *ngFor="let msg of mensagens"
-          class="bubble"
-          [class.bubble-user]="msg.role === 'user'"
-          [class.bubble-assistant]="msg.role === 'assistant'"
-          [attr.aria-label]="msg.role === 'user' ? 'Sua mensagem: ' + msg.text : 'Assistente respondeu: ' + msg.text"
-        >
-          {{ msg.text }}
-        </div>
-      </div>
-
-      <!-- Aviso enquanto está gravando -->
-      <div *ngIf="isRecording" class="gravando-aviso">
-        <span class="gravando-dot"></span>
-        Ouvindo... fale sua pergunta
-      </div>
-
-      <!-- Erro do microfone -->
-      <div *ngIf="erroMic" class="erro-mic red-text">
-        {{ erroMic }}
-      </div>
-
-    </div>
-
-    <!-- Loading — três pontinhos enquanto a IA responde -->
-    <div *ngIf="loading" class="bubble bubble-assistant loading-bubble">
-      <span></span><span></span><span></span>
-    </div>
-
-    <!-- Erro -->
-    <div *ngIf="erro" class="erro-api red-text center-align">
-      {{ erro }}
-    </div>
-
-
-    <div class="modal-footer chatbot-footer">
-
-      <div class="input-field chatbot-input-field">
-        <input
-          id="chatbot-input-{{ idConteudo }}"
-          [(ngModel)]="userInput"
-          (keyup.enter)="send()"
-          type="text"
-          placeholder="Faça uma pergunta..."
-          aria-label="Sua pergunta"
-          [disabled]="loading"
-        />
-      </div>
-
-      <!-- Botão mic — só aparece se o browser suportar -->
-      <button
-        *ngIf="speechOk"
-        class="btn-floating btn waves-effect waves-light"
-        [class.red]="isRecording"
-        [class.grey]="!isRecording"
-        [class.lighten-1]="!isRecording"
-        (click)="toggleMic()"
-        [attr.aria-label]="isRecording ? 'Parar gravação' : 'Usar microfone'"
-        [attr.aria-pressed]="isRecording"
-      >
-        <i class="material-icons">{{ isRecording ? 'stop' : 'mic' }}</i>
+      <button class="btn-flat white-text btn-fechar waves-effect waves-light"
+        (click)="close()"
+        aria-label="Fechar assistente">
+        ✕
       </button>
-
-      <button
-        class="btn-floating btn green darken-2 waves-effect waves-light"
-        (click)="send()"
-        [disabled]="!userInput.trim() || loading"
-        aria-label="Enviar pergunta"
-      >
-        <i class="material-icons">send</i>
-      </button>
-
     </div>
-  </ng-container>
+
+    <div class="chatbot-mensagens" #msgContainer
+      role="log"
+      aria-live="polite"
+      aria-label="Histórico de mensagens do chatbot">
+      <div
+        *ngFor="let msg of mensagens"
+        class="bubble"
+        [class.bubble-user]="msg.role === 'user'"
+        [class.bubble-assistant]="msg.role === 'assistant'"
+        [attr.aria-label]="msg.role === 'user' ? 'Sua mensagem: ' + msg.text : 'Assistente respondeu: ' + msg.text"
+      >
+        {{ msg.text }}
+      </div>
+    </div>
+
+    <div *ngIf="isRecording" class="gravando-aviso">
+      <span class="gravando-dot"></span>
+      Ouvindo... fale sua pergunta
+    </div>
+
+    <div *ngIf="erroMic" class="erro-mic red-text">{{ erroMic }}</div>
+
+  </div>
+
+  <div *ngIf="loading" class="bubble bubble-assistant loading-bubble">
+    <span></span><span></span><span></span>
+  </div>
+
+  <div *ngIf="erro" class="erro-api red-text center-align">{{ erro }}</div>
+
+  <div class="modal-footer chatbot-footer">
+    <div class="input-field chatbot-input-field">
+      <input
+        id="chatbot-input-{{ idConteudo }}"
+        [(ngModel)]="userInput"
+        (keyup.enter)="send()"
+        type="text"
+        placeholder="Faça uma pergunta..."
+        aria-label="Sua pergunta"
+        [disabled]="loading"
+      />
+    </div>
+
+    <button
+      *ngIf="speechOk"
+      class="btn-floating btn waves-effect waves-light"
+      [class.red]="isRecording"
+      [class.grey]="!isRecording"
+      [class.lighten-1]="!isRecording"
+      (click)="toggleMic()"
+      [attr.aria-label]="isRecording ? 'Parar gravação' : 'Usar microfone'"
+      [attr.aria-pressed]="isRecording"
+    >
+      <i class="material-icons">{{ isRecording ? 'stop' : 'mic' }}</i>
+    </button>
+
+    <button
+      class="btn-floating btn green darken-2 waves-effect waves-light"
+      (click)="send()"
+      [disabled]="!userInput.trim() || loading"
+      aria-label="Enviar pergunta"
+    >
+      <i class="material-icons">send</i>
+    </button>
+  </div>
 </div>

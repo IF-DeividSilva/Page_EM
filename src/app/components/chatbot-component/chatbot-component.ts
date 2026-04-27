@@ -4,10 +4,10 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ChatbotService } from './chatbot-service';
+import { ChatbotService } from '../../services/chatbot-service';
 // para o git pages atualizar as respostas do cbot
 import { ChangeDetectorRef } from '@angular/core';
-import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { LiveAnnouncer, A11yModule  } from '@angular/cdk/a11y';
 declare const M: any;
 
 interface Mensagem {
@@ -18,16 +18,18 @@ interface Mensagem {
 @Component({
   selector: 'app-chatbot',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, A11yModule],
   templateUrl: './chatbot-component.html',
   styleUrls: ['./chatbot-component.css'],
+
 })
 
 export class ChatbotComponent implements OnInit, OnDestroy, AfterViewChecked {
   constructor(
     private chatbotService: ChatbotService, 
     private cdr: ChangeDetectorRef,
-    private liveAnnouncer: LiveAnnouncer
+    private liveAnnouncer: LiveAnnouncer,
+    private hostRef: ElementRef
   ) {}
 
   @Input() idConteudo!: number;
@@ -58,11 +60,6 @@ export class ChatbotComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.inicializarMicrofone();
   }
 
-  ngAfterViewInit() {
-    this.modalInstance = M.Modal.init(this.modalEl.nativeElement, {
-      dismissible: true,
-    });
-  }
 
   ngAfterViewChecked() {
     if (this.shouldScroll) {
@@ -158,19 +155,39 @@ toggleMic() {
   // Modal
   // ------------------------------------------------------------------
 
-  open()  { 
-    this.isOpen = true; 
-    this.modalInstance?.open(); 
+open() {
+  this.isOpen = true;
+  this.liveAnnouncer.announce(this.mensagens[0].text, 'polite');
 
-    const mensagemInicial = this.mensagens[0].text;
-    // Anuncia a mensagem inicial para leitores de tela
-    this.liveAnnouncer.announce(mensagemInicial, 'polite');
-  }
-  close() { 
-    this.modalInstance?.close(); 
-    this.isOpen = false;
-  }
+  setTimeout(() => {
+    document.querySelector('nav')?.setAttribute('inert', '');
+    document.querySelector('footer')?.setAttribute('inert', '');
+    document.querySelector('h1')?.setAttribute('inert', '');
+    document.querySelector('[role="search"]')?.setAttribute('inert', '');
 
+    // Marca os outros cards
+    document.querySelectorAll('[role="listitem"]').forEach(item => {
+      if (!item.contains(this.hostRef.nativeElement)) {
+        (item as HTMLElement).setAttribute('inert', '');
+      }
+    });
+
+    // Dentro do card pai, marca tudo exceto o app-chatbot
+    const cardEl = this.hostRef.nativeElement.parentElement;
+    if (cardEl) {
+      cardEl.querySelector('.card-title')?.setAttribute('inert', '');
+      cardEl.querySelector('.card-content')?.setAttribute('inert', '');
+      cardEl.querySelector('.card-image')?.setAttribute('inert', '');
+      cardEl.querySelector('[routerLink]')?.setAttribute('inert', '');
+      cardEl.querySelector('.btn.light-green')?.setAttribute('inert', '');
+    }
+  });
+}
+
+close() {
+  this.isOpen = false;
+  document.querySelectorAll('[inert]').forEach(el => el.removeAttribute('inert'));
+}
   // ------------------------------------------------------------------
   // Envio
   // ------------------------------------------------------------------
