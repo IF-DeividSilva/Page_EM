@@ -29,17 +29,9 @@ export class AccessibilityService {
    * @param idConteudo - ID do conteúdo
    * @returns Observable com array de WCAGResolucao (id + categoria + subcategoria)
    */
-  obterCriterios(idConteudo: number): Observable<WCAGResolucao[]> {
-    return forkJoin({
-      conteudo: this.acervoService.getConteudo(idConteudo),
-      wcagMetadados: this.acervoService.getWcagMetadados()
-    }).pipe(
-      map(({ conteudo, wcagMetadados }) => {
-
-        // pega os ids do conteudo ex: [{ WCAG_id: 18 }, { WCAG_id: 24 }]
-        const ids: number[] = (conteudo?.WCAG ?? []).map((w: any) => w.WCAG_id);
-
-        // associa cada id com sua categoria e subcategoria do metadados_WCAG.json
+  obterCriterios(ids: number[]): Observable<WCAGResolucao[]> {
+    return this.acervoService.getWcagMetadados().pipe(
+      map((wcagMetadados) => {
         return ids.map(id => {
           const encontrado = wcagMetadados.find((w: WCAGMetadado) => w.WCAG_id_pk === id);
           return {

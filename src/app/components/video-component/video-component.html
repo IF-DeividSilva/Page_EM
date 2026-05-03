@@ -1,0 +1,14 @@
+<!-- WCAG 1 -->
+
+<div class="midia-wrapper">
+  <video
+    class="midia-video"
+    [attr.aria-describedby]="descId"
+    [attr.aria-label]="'Reprodutor de vídeo: ' + conteudo?.titulo"
+    (play)="reproduzindo = true"
+    (pause)="reproduzindo = false"
+    (ended)="reproduzindo = false">
+    <source [src]="videoUrl" type="video/mp4">
+    Seu navegador não suporta vídeo.
+  </video>
+</div>

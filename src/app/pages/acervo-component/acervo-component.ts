@@ -29,7 +29,7 @@ export class AcervoComponent implements OnInit{
 
   private searchTimeout: any;
 
-  // Injete o AcervoService aqui no construtor
+
   constructor(private route: ActivatedRoute, private acervoService: AcervoService, private liveAnnouncer: LiveAnnouncer) {
     this.acervoRaw = this.acervoService.acervoRaw;
   }

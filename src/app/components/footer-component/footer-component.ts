@@ -21,7 +21,7 @@ import { Component } from '@angular/core';
                   </div>
                   <div class="col l4 offset-l2 s12">
                     <section aria-label="Links externos">
-                      <h5 class="black-text" id="footer-links-title">Links</h5>
+                      <h2 class="black-text" id="footer-links-title">Links</h2>
                       <ul aria-labelledby="footer-links-title">
                         <li><a class="black-text" href="https://www.instagram.com/ecomuseudobone/" aria-label="Instagram do EcoMuseu do Boné (abre em nova aba)">Instagram</a></li>
                         <li><a class="black-text" href="https://linktr.ee/ecomuseudobone?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGn5XoysEzuazQzQWIW3_uBx004LZy5UoAreTOt8WnuqMpiZb1TojST6BkgLb0_aem_yXNLIZ0MPafj6K2Npr3Www" aria-label="Linktree do EcoMuseu do Boné (abre em nova aba)">Linktree</a></li>

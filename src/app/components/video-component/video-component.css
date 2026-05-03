@@ -1,0 +1,25 @@
+.midia-wrapper {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  margin: 1rem 0;
+  box-sizing: border-box;
+}
+
+.midia-video {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  display: block;
+  background-color: #000;
+  object-fit: contain;
+  box-sizing: border-box;
+}
+
+/* Telas pequenas (celular) */
+@media (max-width: 600px) {
+  .midia-video {
+    max-height: 40vh;
+    border-radius: 0;
+  }
+}
