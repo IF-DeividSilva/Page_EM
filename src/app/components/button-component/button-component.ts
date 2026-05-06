@@ -10,11 +10,11 @@ import { AcervoService } from '../../services/acervo-service';
   styleUrls: ['./button-component.css']
 })
 export class ButtonComponent implements OnDestroy {
-  @Input() itemId!: number;
-  @Input() temControles: boolean = false;
+  @Input() itemId: number | null = null;
+  @Input() mediaEl: HTMLMediaElement | null = null; // ← elemento externo (vídeo)
+  @Input() tipo: 'audio' | 'video' = 'audio';
 
   reproduzindo = false;
-  volume = 1;
   private audio: HTMLAudioElement | null = null;
 
   constructor(private acervoService: AcervoService) {}
@@ -23,18 +23,21 @@ export class ButtonComponent implements OnDestroy {
     return `${this.acervoService.acervoRaw}/Audios/audio_${this.itemId}.wav`;
   }
 
-  toggleReproducao() {
+  // Expõe o elemento de áudio interno para o ControlComponent
+  get audioElement(): HTMLAudioElement {
     if (!this.audio) {
       this.audio = new Audio(this.audioUrl);
       this.audio.onended = () => { this.reproduzindo = false; };
     }
-    this.reproduzindo ? this.audio.pause() : this.audio.play();
-    this.reproduzindo = !this.reproduzindo;
+    return this.audio;
   }
 
-  atualizarVolume(valor: string) {
-    this.volume = parseFloat(valor);
-    if (this.audio) this.audio.volume = this.volume;
+  toggleReproducao() {
+    // Se tiver mediaEl externo (vídeo), usa ele
+    // Senão cria/usa o áudio interno (.wav)
+    const el: HTMLMediaElement = this.mediaEl ?? this.audioElement;
+    this.reproduzindo ? el.pause() : el.play();
+    this.reproduzindo = !this.reproduzindo;
   }
 
   ngOnDestroy() {

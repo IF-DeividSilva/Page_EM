@@ -55,28 +55,52 @@ export class AccessibilityComponent implements OnInit {
         this.renderer.appendChild(this.elementoAlvo, ref.location.nativeElement);
       }
     
-    // 3. Verifica se tem critérios de botão e se tem audio e injeta o ButtonComponent (Criterios 5, 6, 7, 8)
-    const temBotao = this.conteudo.tem_audio && criterios.some(c => IDS_BOTAO.includes(c.id));
-    if (temBotao) {
-      const ref: ComponentRef<ButtonComponent> = this.viewContainerRef.createComponent(ButtonComponent, { injector: this.injector });
-      ref.setInput('itemId', this.conteudo.id_conteudo_pk);
-      ref.setInput('temControles', criterios.some(c => IDS_CONTROLE_AUDIO.includes(c.id)));
-      this.renderer.appendChild(this.elementoAlvo, ref.location.nativeElement);
+    // 3. Audio .wav
+    //  Verifica se tem critérios de botão e se tem audio e injeta o ButtonComponent (Criterios 5, 6, 7, 8)
+    const temBotaoAudio = this.conteudo.tem_audio && criterios.some(c => IDS_BOTAO.includes(c.id));
+    if (temBotaoAudio ) {
+      const botaoRef = this.viewContainerRef.createComponent(ButtonComponent, { injector: this.injector });
+      botaoRef.setInput('itemId', this.conteudo.id_conteudo_pk);
+      this.renderer.appendChild(this.elementoAlvo, botaoRef.location.nativeElement);
+
+      if (temControleAudio) {
+        const controlRef = this.viewContainerRef.createComponent(ControlComponent, { injector: this.injector });
+        controlRef.setInput('mediaEl', botaoRef.instance.audioElement);
+        controlRef.setInput('tipo', 'audio');
+        this.renderer.appendChild(this.elementoAlvo, controlRef.location.nativeElement);
+      }
+
+      
     }
 
+    // 4. Video .mp4, .webm, .ogg 
     const isVideo = (arquivo: string) => /\.(mp4|webm|ogg)$/i.test(arquivo);
-    // 4. Verifica se tem critérios de vídeo e injeta o VideoComponent (Criterio 1)
+    // Verifica se tem critérios de vídeo e injeta o VideoComponent (Criterio 1)
+    // verifica se tem critérios de botão para injetar o ButtonComponent (Criterio 5, 6, 7, 8) 
     // e se tem controle de áudio para injetar o ControlComponent (Criterio 2)
     const temVideo = criterios.some(c => IDS_VIDEO.includes(c.id)) && temControleAudio && isVideo(this.conteudo.arquivo);
+    const temBotaoVideo = criterios.some(c => IDS_BOTAO.includes(c.id)) && (temVideo);
     if (temVideo) {
       const videoRef = this.viewContainerRef.createComponent(VideoComponent, { injector: this.injector });
       videoRef.setInput('conteudo', this.conteudo);
       this.renderer.appendChild(this.elementoAlvo, videoRef.location.nativeElement);
+      videoRef.changeDetectorRef.detectChanges(); // força renderizar o template
 
-      const controlRef = this.viewContainerRef.createComponent(ControlComponent, { injector: this.injector });
-      controlRef.setInput('conteudo', this.conteudo);
-      controlRef.setInput('elementoAlvo', this.elementoAlvo);
-      this.renderer.appendChild(this.elementoAlvo, controlRef.location.nativeElement);
+      const videoEl = videoRef.location.nativeElement.querySelector('video'); // ← pega após detectChanges
+      console.log('videoEl:', videoEl);
+
+      if (temBotaoVideo && videoEl) {
+        const botaoVideoRef = this.viewContainerRef.createComponent(ButtonComponent, { injector: this.injector });
+        botaoVideoRef.setInput('mediaEl', videoEl, );
+        botaoVideoRef.setInput('tipo', 'video');
+        this.renderer.appendChild(this.elementoAlvo, botaoVideoRef.location.nativeElement);
+
+        if (temControleAudio) {
+          const controlRef = this.viewContainerRef.createComponent(ControlComponent, { injector: this.injector });
+          controlRef.setInput('mediaEl', videoEl);
+          this.renderer.appendChild(this.elementoAlvo, controlRef.location.nativeElement);
+        }
+      }
     }
 
       const isImagem = (arquivo: string) => /\.(jpg|jpeg|png|gif|webp)$/i.test(arquivo);
@@ -91,7 +115,8 @@ export class AccessibilityComponent implements OnInit {
 } 
 
 console.log('tem_audio:', this.conteudo.tem_audio);
-console.log('temBotao:', temBotao);
+console.log('temBotao:', temBotaoAudio);
+console.log('temVideo:', temVideo);
 console.log('criterios:', criterios.map(c => c.id));
 console.log('tem imagem:', temImagem);
 

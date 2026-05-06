@@ -10,8 +10,9 @@ import { AcervoService } from '../../services/acervo-service';
   templateUrl: './video-component.html',
   styleUrl: './video-component.css'
 })
-export class VideoComponent {
 
+export class VideoComponent {
+ // @ViewChild('videoEl') videoElRef!: ElementRef<HTMLVideoElement>;
   @Input() conteudo!: any;
 
   reproduzindo = false;
@@ -21,6 +22,10 @@ export class VideoComponent {
   get videoUrl(): string {
     return `${this.acervoService.acervoRaw}/${this.conteudo.categoria}/${this.conteudo.arquivo}`;
   }
+
+ // get videoElement(): HTMLVideoElement {
+   // return this.videoElRef.nativeElement;
+  //}
 
   get descId(): string {
     return `desc-video-${this.conteudo.id_conteudo_pk}`;

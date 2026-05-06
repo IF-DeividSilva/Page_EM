@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ElementRef } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -9,31 +9,19 @@ import { CommonModule } from '@angular/common';
 })
 export class ControlComponent implements OnInit {
 
-  @Input() conteudo!: any;
-  @Input() elementoAlvo!: HTMLElement;
+  @Input() mediaEl!: HTMLMediaElement; // ← @Input() público
+  @Input() tipo: 'audio' | 'video' = 'video';
 
-  reproduzindoVideo = false;
-  volumeVideo = 1;
-  private videoEl: HTMLVideoElement | null = null;
+  volume = 1;
 
   ngOnInit() {
-    // Busca o <video> no container pai
-    this.videoEl = this.elementoAlvo.querySelector('video');
-    if (this.videoEl) {
-      this.videoEl.addEventListener('play',  () => this.reproduzindoVideo = true);
-      this.videoEl.addEventListener('pause', () => this.reproduzindoVideo = false);
-      this.videoEl.addEventListener('ended', () => this.reproduzindoVideo = false);
+    if (!this.mediaEl) {
+      console.warn('ControlComponent: mediaEl não foi passado!');
     }
   }
 
-  toggleReproducaoVideo() {
-    if (!this.videoEl) return;
-    this.reproduzindoVideo ? this.videoEl.pause() : this.videoEl.play();
+  atualizarVolume(valor: string) {
+    this.volume = parseFloat(valor);
+    if (this.mediaEl) this.mediaEl.volume = this.volume;
   }
-
-  atualizarVolumeVideo(valor: string) {
-    this.volumeVideo = parseFloat(valor);
-    if (this.videoEl) this.videoEl.volume = this.volumeVideo;
-  }
-
 }

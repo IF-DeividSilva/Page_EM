@@ -2,26 +2,13 @@
 <!-- WCAG 6: aria-label muda dinamicamente descrevendo a ação atual -->
 <!-- WCAG 7: área mínima de 44x44px garantida via CSS -->
 
-<div role="group" aria-label="Controles de áudio">
-
+<div role="group" [attr.aria-label]="tipo === 'video' ? 'Reprodução do vídeo' : 'Reprodução do áudio'">
   <button type="button"
           class="btn waves-effect waves-light"
-          [attr.aria-label]="reproduzindo ? 'Pausar áudio' : 'Reproduzir áudio'"
-          [attr.aria-pressed]="reproduzindo"
+          [attr.aria-label]="reproduzindo ? 'Pausar ' + tipo : 'Reproduzir ' + tipo"
           (click)="toggleReproducao()">
     <i class="material-icons" aria-hidden="true">
       {{ reproduzindo ? 'pause' : 'play_arrow' }}
     </i>
   </button>
-
-  <!-- Só aparece se tiver o critério 2 -->
-  <div *ngIf="temControles" class="volume-control">
-    <i class="material-icons" aria-hidden="true">volume_up</i>
-    <input type="range"
-           min="0" max="1" step="0.1"
-           [value]="volume"
-           (change)="atualizarVolume($any($event.target).value)"
-           aria-label="Controle de volume do áudio">
-  </div>
-
 </div>

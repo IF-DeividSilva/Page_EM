@@ -60,7 +60,8 @@
             <div class="card-image">
 
               <img *ngIf="item.arquivo.endsWith('.png') || item.arquivo.endsWith('.jpg') || item.arquivo.endsWith('.jpeg')"
-                  [src]="acervoRaw + '/' + item.categoria + '/' + item.arquivo"
+                  [src]="acervoRaw + '/' + item.categoria + '/' + item.arquivo" 
+                  alt=""
                   aria-hidden="true">
 
               <video *ngIf="item.arquivo.endsWith('.MP4')"
@@ -69,7 +70,8 @@
               </video>
 
               <img *ngIf="item.arquivo.endsWith('.pdf')"
-                  src="assets/pdf.png"
+                  src="assets/pdf.png" 
+                  alt=""
                   aria-hidden="true">
 
               <h2 class="card-title" [attr.id]="'titulo-' + item.id_conteudo_pk" style="margin: 0;">

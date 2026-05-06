@@ -1,5 +1,8 @@
 <!-- WCAG 1 -->
 
+<!-- Descrição oculta vinculada ao vídeo via aria-describedby -->
+<p [id]="descId" class="sr-only">{{ conteudo?.conteudo }}</p>
+
 <div class="midia-wrapper">
   <video
     class="midia-video"
