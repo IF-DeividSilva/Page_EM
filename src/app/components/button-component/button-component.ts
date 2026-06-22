@@ -12,7 +12,8 @@ import { AcervoService } from '../../services/acervo-service';
 export class ButtonComponent implements OnDestroy {
   @Input() itemId: number | null = null;
   @Input() mediaEl: HTMLMediaElement | null = null; // ← elemento externo (vídeo)
-  @Input() tipo: 'audio' | 'video' = 'audio';
+  @Input() tipo: 'audio' | 'video' | 'speech' = 'audio';
+  @Input() texto: string = ''; 
 
   reproduzindo = false;
   private audio: HTMLAudioElement | null = null;
@@ -33,6 +34,12 @@ export class ButtonComponent implements OnDestroy {
   }
 
   toggleReproducao() {
+    // Caso Spreech API
+    if (this.tipo === 'speech') {
+      this.toggleSpeech();
+      return;
+    }
+
     // Se tiver mediaEl externo (vídeo), usa ele
     // Senão cria/usa o áudio interno (.wav)
     const el: HTMLMediaElement = this.mediaEl ?? this.audioElement;
@@ -40,8 +47,32 @@ export class ButtonComponent implements OnDestroy {
     this.reproduzindo = !this.reproduzindo;
   }
 
+  private toggleSpeech() {
+    if (!('speechSynthesis' in window)) return; // API não suportada
+      if (this.reproduzindo) {
+        speechSynthesis.pause();
+        this.reproduzindo = false;
+        return;
+      }
+      if (speechSynthesis.paused) {
+        speechSynthesis.resume();
+        this.reproduzindo = true;
+        return;
+      }
+          // Inicia nova leitura
+    speechSynthesis.cancel();
+    const fala = new SpeechSynthesisUtterance(this.texto);
+    fala.lang = 'pt-BR';
+    fala.rate = 1;
+    fala.onstart = () => { this.reproduzindo = true; };
+    fala.onend   = () => { this.reproduzindo = false; };
+    fala.onerror = () => { this.reproduzindo = false; };
+    speechSynthesis.speak(fala);
+  }
+
   ngOnDestroy() {
     this.audio?.pause();
     this.audio = null;
+    if (this.tipo === 'speech') speechSynthesis.cancel();
   }
 }

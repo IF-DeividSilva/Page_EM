@@ -2,10 +2,10 @@
 <!-- WCAG 6: aria-label muda dinamicamente descrevendo a ação atual -->
 <!-- WCAG 7: área mínima de 44x44px garantida via CSS -->
 
-<div role="group" [attr.aria-label]="tipo === 'video' ? 'Reprodução do vídeo' : 'Reprodução do áudio'">
+<div role="group" [attr.aria-label]="tipo === 'video' ? 'Reprodução do vídeo' : tipo === 'speech' ? 'Leitura em voz sintetizada' : 'Reprodução do áudio'">
   <button type="button"
           class="btn waves-effect waves-light"
-          [attr.aria-label]="reproduzindo ? 'Pausar ' + tipo : 'Reproduzir ' + tipo"
+          [attr.aria-label]="reproduzindo ? 'Pausar ' + (tipo === 'speech' ? 'leitura' : tipo) : tipo === 'speech' ? 'Ouvir conteúdo em voz sintetizada' : 'Reproduzir ' + tipo"
           (click)="toggleReproducao()">
     <i class="material-icons" aria-hidden="true">
       {{ reproduzindo ? 'pause' : 'play_arrow' }}

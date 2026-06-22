@@ -1,12 +1,32 @@
-<div class="volume-control" role="group" [attr.aria-label]="tipo === 'video' ? 'Controles de volume do vídeo' : 'Controles de volume do áudio'">
+<!-- Controle de volume — apenas para áudio e vídeo -->
+<div 
+     class="volume-control"
+     role="group"
+     [attr.aria-label]="tipo === 'video' ? 'Controles de volume do vídeo' : 'Controles de volume do áudio'">
   <label [for]="'volume-control-' + tipo">
     <i class="material-icons" aria-hidden="true">volume_up</i>
   </label>
-  <input 
+  <input
     [id]="'volume-control-' + tipo"
     type="range"
     min="0" max="1" step="0.1"
     [value]="volume"
     (change)="atualizarVolume($any($event.target).value)"
     [attr.aria-label]="tipo === 'video' ? 'Controle de volume do vídeo' : 'Controle de volume do áudio'">
+</div>
+
+<!-- Controle de velocidade — para todos os tipos -->
+<div class="volume-control"
+     role="group"
+     [attr.aria-label]="tipo === 'speech' ? 'Controle de velocidade da leitura sintetizada' : tipo === 'video' ? 'Controle de velocidade do vídeo' : 'Controle de velocidade do áudio'">
+  <label [for]="'velocidade-control-' + tipo">
+    <i class="material-icons" aria-hidden="true">speed</i>
+  </label>
+  <input
+    [id]="'velocidade-control-' + tipo"
+    type="range"
+    min="0.5" max="2" step="0.1"
+    [value]="velocidade"
+    (change)="atualizarVelocidade($any($event.target).value)"
+    [attr.aria-label]="tipo === 'speech' ? 'Velocidade da leitura sintetizada' : tipo === 'video' ? 'Velocidade do vídeo' : 'Velocidade do áudio'">
 </div>

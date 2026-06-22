@@ -55,6 +55,7 @@ export class AccessibilityComponent implements OnInit {
         this.renderer.appendChild(this.elementoAlvo, ref.location.nativeElement);
       }
     
+    
     // 3. Audio .wav
     //  Verifica se tem critérios de botão e se tem audio e injeta o ButtonComponent (Criterios 5, 6, 7, 8)
     const temBotaoAudio = this.conteudo.tem_audio && criterios.some(c => IDS_BOTAO.includes(c.id));
@@ -70,7 +71,18 @@ export class AccessibilityComponent implements OnInit {
         this.renderer.appendChild(this.elementoAlvo, controlRef.location.nativeElement);
       }
 
-      
+      const speechRef = this.viewContainerRef.createComponent(ButtonComponent, { injector: this.injector });
+      speechRef.setInput('tipo', 'speech');
+      speechRef.setInput('texto', this.conteudo.conteudo ?? '');
+      this.renderer.appendChild(this.elementoAlvo, speechRef.location.nativeElement);
+
+      if (temControleAudio) {
+        const speechControlRef = this.viewContainerRef.createComponent(ControlComponent, { injector: this.injector });
+        speechControlRef.setInput('tipo', 'speech');
+        speechControlRef.setInput('texto', this.conteudo.conteudo ?? '');
+        this.renderer.appendChild(this.elementoAlvo, speechControlRef.location.nativeElement);
+      }
+  
     }
 
     // 4. Video .mp4, .webm, .ogg 
