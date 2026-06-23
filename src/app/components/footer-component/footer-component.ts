@@ -11,11 +11,11 @@ import { Component } from '@angular/core';
                     <div class="row valign-wrapper">
                       <div class="col s6 center-align">
                         <p class="black-text">EcoMuseu do Boné</p>
-                        <img src="../assets/logo-ecomuseu.png" alt="Logo do EcoMuseu do Boné" class="responsive-img" style="max-width: 100px;">
+                        <img src="assets/logo-ecomuseu.png" alt="Logo do EcoMuseu do Boné" class="responsive-img" style="max-width: 100px;">
                       </div>
                       <div class="col s6 center-align">
                         <p class="black-text">Em parceria com:</p>
-                        <img src="../assets/apl.jpg" alt="Logo do APL Bonés de Apucarana" class="responsive-img" style="max-width: 100px;">
+                        <img src="assets/apl.jpg" alt="Logo do APL Bonés de Apucarana" class="responsive-img" style="max-width: 100px;">
                       </div>
                     </div>
                   </div>
