@@ -98,84 +98,237 @@ Base de dados Ecomuseu/
     │   ├── metadados_conteudo_2.json
     │   └── ...
     └── metadados_WCAG.json
-
+        
 ```
 
-## Estrutura do Projeto
+## Estrutura do projeto
+
 ```
-Base de dados Ecomuseu/
-├── Dados/
-│   ├── Artigos/
-│   │   ├── artigo_2.pdf
-│   │   └── ...
-│   └── Audios/
-│       ├── audio_2.wav
+PAGE_ECOMUSEU/
+├── src/
+│   ├── app/
+│   │   ├── components/
+│   │   │   ├── accessibility-component/
+│   │   │   ├── button-component
+│   │   │   ├── chatbot-component
+│   │   │   ├── control-component
+│   │   │   ├── footer-component
+│   │   │   ├── image-component
+│   │   │   ├── navbar-component
+│   │   │   ├── reading-order-component
+│   │   │   └──video-component
+│   │   ├── pages/
+│   │   │   ├── acervo-page/
+│   │   │   ├── detalhes-page/
+│   │   │   ├── sobre-page/
+│   │   │   └── visite_nos-page/
+│   │   └── services/
+│   │       ├── accessibility-service.ts
+│   │       ├── acervo-service.ts
+│   │       ├── chatbot-service.ts
+│   │       └── spreech-service.ts
+│   └── assets/
+│       ├── imagens_do_site
 │       └── ...
-└── Metadados/
-    ├── metadados_principal.json
-    ├── metadados_conteudos/
-    │   ├── metadados_conteudo_2.json
-    │   └── ...
-    └── metadados_WCAG.json
-
+├── index.html
+├── main.ts
+├── styles.css
+├── angular.json
+├── package-lock.json
+├── package.json
+├── README.md
+├── tsconfig.app.json
+├── tsconfig.json
+└── tsconfig.spec.json
+        
 ```
 
 
-## Fotos do Site
+# Fotos do Site
+---
+## Home e Acervo
+<img src="./imgs/home.png" alt="Página Home" width="250">
+--------
+<img src="./imgs/acervo.png" alt="Página Acervo" width="250">
 
-# Home/Sobre
-<img src="./src/imgs/calculator.png" alt="Calculadora React" width="500">
 ---
-# Acervo
-<img src="./src/imgs/calculator.png" alt="Calculadora React" width="500">
+## Visite-nos e Detalhes
+<img src="./imgs/visite-nos.png" alt="Página Visite-nos" width="250">
+--------
+<img src="./imgs/detalhes.png" alt="Página Detalhes" width="250">
+
+
 ---
-# Visite-nos
-<img src="./src/imgs/calculator.png" alt="Calculadora React" width="500">
----
-# Detalhes
-<img src="./src/imgs/calculator.png" alt="Calculadora React" width="500">
----
-# Chatbot
-<img src="./src/imgs/calculator.png" alt="Calculadora React" width="500">
----
+## Chatbot
+<img src="./imgs/chatbot.png" alt="Modal Chatbot" width="250">
+
 
 ## Componentes
 
-### **Calculator.jsx**
-Componente principal que gerencia toda a lógica da calculadora.
-
-**Recursos:**
-- Gerencia o estado da aplicação (display, operação, valores armazenados)
-- Controla as operações matemáticas
-- Implementa validações de entrada
-- Renderiza os botões e o display
-
+### **AccessibilityComponent**
+Componente orquestrador central da lógica de acessibilidade. Recebe o conteúdo de um item do acervo, consulta os critérios WCAG associados e injeta dinamicamente os sub-componentes adequados no elemento-alvo da página.
+ 
+**Inputs:**
+- `idConteudo` — ID do item de conteúdo do acervo
+- `elementoAlvo` — Elemento HTML onde os sub-componentes serão injetados
+- `conteudo` — Objeto com os dados do item (metadados, arquivo, texto, etc.)
+**Lógica de injeção por critério WCAG:**
+ 
+| Critério(s) | Componente injetado | Condição |
+|---|---|---|
+| 5, 6, 7, 8 | `ButtonComponent` (áudio `.wav`) | `conteudo.tem_audio === true` |
+| 5, 6, 7, 8 | `ButtonComponent` (Speech API) | `conteudo.tem_audio === true` |
+| 2 | `ControlComponent` | Sempre que houver botão de áudio ou vídeo |
+| 1 + 2 | `VideoComponent` + `ButtonComponent` + `ControlComponent` | Arquivo com extensão `.mp4`, `.webm` ou `.ogg` |
+| 14, 22 | `ReadingOrderComponent` | Critérios de ordem de leitura e foco previsível |
+| 18 | `ImageComponent` | Arquivo com extensão de imagem (`.jpg`, `.png`, etc.) |
+ 
+---
+ 
+### **ButtonComponent**
+Componente de botão acessível para reprodução de mídia. Suporta três modos de operação: reprodução de áudio pré-gravado (`.wav`), controle de elemento de vídeo externo e leitura sintetizada via Web Speech API.
+ 
+**Critérios WCAG atendidos:** 5 (semântica com `<button>` nativo), 6 (`aria-label` dinâmico descrevendo a ação atual), 7 (área mínima de toque de 44×44px via CSS).
+ 
+**Inputs:**
+- `itemId` — ID do item do acervo, usado para montar a URL do arquivo `.wav`
+- `mediaEl` — Elemento `HTMLMediaElement` externo (usado no modo vídeo)
+- `tipo` — Modo de operação: `'audio'` | `'video'` | `'speech'` (padrão: `'audio'`)
+- `texto` — Texto a ser lido no modo `speech`
 **Estado:**
-```javascript
-{
-  displayValue: '0',        // Valor exibido no display
-  clearDisplay: false,      // Flag para limpar o display
-  operation: null,          // Operação atual (+, -, *, /)
-  values: [0, 0],          // Armazena os dois valores da operação
-  current: 0                // Índice do valor atual (0 ou 1)
-}
+```typescript
+reproduzindo: boolean  // Controla o ícone exibido (play/pause) e o aria-label
+```
+ 
+**Comportamento:**
+- **Modo `audio`:** Cria um `HTMLAudioElement` interno sob demanda e alterna play/pause.
+- **Modo `video`:** Delega play/pause ao `mediaEl` externo recebido via `@Input()`.
+- **Modo `speech`:** Usa a `SpeechSynthesis API` com `lang: 'pt-BR'`. Suporta pausa/retomada da leitura em andamento.
+---
+ 
+### **ControlComponent**
+Componente de controles de acessibilidade para mídia. Exibe sliders para ajuste de volume e velocidade de reprodução, compatível com áudio, vídeo e síntese de voz.
+ 
+**Critério WCAG atendido:** 2 (controle de áudio — o usuário pode pausar, parar ou ajustar o volume de qualquer mídia que inicie automaticamente).
+ 
+**Inputs:**
+- `mediaEl` — Elemento `HTMLMediaElement` externo (áudio ou vídeo)
+- `tipo` — Tipo de mídia controlada: `'audio'` | `'video'` | `'speech'` (padrão: `'audio'`)
+- `texto` — Texto em reprodução (necessário para reiniciar a Speech API com novos parâmetros)
+**Estado:**
+```typescript
+volume:     number  // Valor atual do volume (0 a 1, padrão: 1)
+velocidade: number  // Valor atual da velocidade (0.5 a 2, padrão: 1)
+```
+ 
+**Comportamento:**
+- **Modo `audio` / `video`:** Atualiza diretamente `mediaEl.volume` e `mediaEl.playbackRate`.
+- **Modo `speech`:** Persiste os valores no `SpeechService` e reinicia a `SpeechSynthesis` para aplicar o novo volume ou velocidade (a API só aceita esses parâmetros no início da fala).
+---
+ 
+### **ChatbotComponent**
+Componente de assistente virtual conversacional. Abre como um modal com gerenciamento de foco completo (inert nos elementos ao redor), suporta entrada por texto e por voz, e utiliza `LiveAnnouncer` do Angular CDK para garantir que todas as interações sejam anunciadas aos leitores de tela.
+ 
+**Critérios WCAG atendidos:** `aria-live="polite"` no histórico de mensagens, `role="dialog"` com `aria-modal="true"`, captura e liberação de foco com `cdkTrapFocus`, e uso de `inert` para isolar o restante da página durante a interação.
+ 
+**Inputs:**
+- `idConteudo` — ID do conteúdo do acervo associado ao chatbot
+- `titulo` — Título do item exibido na mensagem inicial do assistente
+**Estado:**
+```typescript
+mensagens:   Mensagem[]  // Histórico de mensagens { role: 'user' | 'assistant', text: string }
+userInput:   string      // Texto digitado pelo usuário
+isRecording: boolean     // Indica se o microfone está ativo
+speechOk:    boolean     // Indica se a Web Speech API é suportada pelo navegador
+loading:     boolean     // Indica que uma resposta está sendo aguardada da API
+isOpen:      boolean     // Controla a visibilidade do modal
+erroMic:     string      // Mensagem de erro do microfone (exibida e anunciada)
+erro:        string      // Mensagem de erro da API (exibida e anunciada)
+```
+ 
+**Métodos públicos:**
+- `open()` — Abre o modal e aplica `inert` nos elementos externos para isolar o foco
+- `close()` — Fecha o modal e remove todos os atributos `inert`
+- `send()` — Envia a pergunta à API (via `ChatbotService`) e anuncia a resposta
+- `toggleMic()` — Inicia a captura de voz via `SpeechRecognition`; o envio ocorre automaticamente ao detectar silêncio
+
+### **FooterComponent**
+Componente de rodapé do site. Exibe os logos do EcoMuseu do Boné e do APL Bonés de Apucarana, além de links externos para as redes sociais do museu.
+
+**Critérios WCAG atendidos:** `aria-label` no `<footer>`, uso de `<section>` com `aria-label` para agrupar os links externos, e `aria-label` nos links indicando que abrem em nova aba.
+
+> Não possui `@Input()` — é um componente puramente estático e de apresentação.
+
+---
+
+### **ImageComponent**
+Componente de exibição de imagens do acervo. Renderiza a imagem do item com texto alternativo preenchido dinamicamente a partir do banco de dados, garantindo descrição semântica real para leitores de tela.
+
+**Critério WCAG atendido:** 18 (texto alternativo para imagens de conteúdo — o atributo `alt` é populado com o campo `conteudo` do metadado, que contém a descrição real da imagem, nunca um valor genérico).
+
+**Inputs:**
+- `conteudo` — Objeto com os metadados do item do acervo (campos `conteudo`, `categoria`, `arquivo`)
+
+**Computed properties:**
+```typescript
+get imagemUrl(): string  // Monta a URL da imagem: acervoRaw + categoria + arquivo
 ```
 
-### **Button.jsx**
-Componente reutilizável de botão com suporte a diferentes estilos.
+---
 
-**Props:**
-- `label`: Texto exibido no botão
-- `click`: Função de callback ao clicar
-- `operation`: Flag para botões de operação
-- `double`: Expande o botão para 2 colunas
-- `triple`: Expande o botão para 3 colunas
+### **NavbarComponent**
+Componente de navegação principal. Gerencia o menu desktop e o menu lateral móvel (sidenav do Materialize), com controle completo de foco e acessibilidade: `aria-expanded` no botão hambúrguer, `aria-hidden` e `tabindex` nos links do sidenav conforme o estado de abertura, e uso de `inert` para isolar o restante da página quando o menu mobile está aberto.
 
-### **Display.jsx**
-Componente que exibe o valor atual da calculadora.
+**Critérios WCAG atendidos:** `aria-current="page"` no link ativo, gerenciamento de foco ao navegar entre rotas (foco movido automaticamente para o conteúdo da nova página), captura de foco no sidenav via `inert` em `<main>`, `<footer>` e `<nav>`.
 
-**Props:**
-- `value`: Número ou resultado a ser exibido
+> Não possui `@Input()` — injeta `Router` diretamente via `inject()`.
+
+**Comportamento:**
+- **Menu mobile:** O sidenav inicializa via `M.Sidenav.init()` aguardando a disponibilidade do Materialize (polling com `setInterval`). Ao abrir, aplica `inert` no restante da página e move o foco para o primeiro link; ao fechar, remove `inert` e restaura `aria-expanded`.
+- **Navegação por rota:** A cada `NavigationEnd`, fecha o sidenav (se aberto) e move o foco para o elemento `<main>` ou para o primeiro elemento após o `<router-outlet>`, garantindo que o leitor de tela anuncie o novo conteúdo.
+
+---
+
+### **ReadingOrderComponent**
+Componente de metadados do item do acervo. Renderiza em ordem de leitura semanticamente correta os campos descritivos do conteúdo (autor, ano, categoria, assunto e conteúdo), garantindo sequência previsível de leitura para leitores de tela.
+
+**Critérios WCAG atendidos:** 14 (ordem de leitura significativa — os campos são renderizados em sequência lógica e predefinida, independente do objeto recebido) e 22 (foco previsível — os elementos são renderizados como parágrafos semânticos dentro de uma `<section>` com `aria-label`).
+
+**Inputs:**
+- `conteudo` — Objeto com os metadados do item do acervo
+
+**Campos exibidos (em ordem fixa):**
+
+| Campo | Chave no objeto |
+|---|---|
+| Autor | `autor` |
+| Ano | `ano` |
+| Categoria | `categoria` |
+| Assunto | `assunto` |
+| Conteúdo | `conteudo` |
+
+Campos ausentes ou nulos no objeto são omitidos silenciosamente via `*ngIf`.
+
+---
+
+### **VideoComponent**
+Componente de exibição de vídeos do acervo. Renderiza um `<video>` nativo com descrição acessível vinculada via `aria-describedby`, permitindo que o leitor de tela anuncie o conteúdo descritivo do vídeo antes da reprodução. O controle de play/pause e volume é delegado ao `ButtonComponent` e ao `ControlComponent`, injetados externamente pelo `AccessibilityComponent`.
+
+**Critério WCAG atendido:** 1 (alternativa em texto para conteúdo de vídeo — a descrição do vídeo é exposta via `aria-describedby` apontando para um parágrafo com classe `.sr-only`, visível apenas para leitores de tela).
+
+**Inputs:**
+- `conteudo` — Objeto com os metadados do item do acervo (campos `titulo`, `conteudo`, `categoria`, `arquivo`, `id_conteudo_pk`)
+
+**Computed properties:**
+```typescript
+get videoUrl(): string   // Monta a URL do vídeo: acervoRaw + categoria + arquivo
+get descId():   string   // Gera ID único para o aria-describedby: 'desc-video-{id}'
+```
+
+**Estado:**
+```typescript
+reproduzindo: boolean  // Atualizado pelos eventos nativos (play), (pause) e (ended) do elemento <video>
+```
 
 ---
 
@@ -203,13 +356,13 @@ Componente que exibe o valor atual da calculadora.
 
 ## Licença
 
-Este projeto é software livre, desenvolvido como um produto para validar e mostrar a viabilidade da metodologia do TCC. O conteúdo do EcoMuseu do Boné pertence aos seus respectivos mantenedores.
+Este projeto é software livre, desenvolvido como um produto para validar e mostrar a viabilidade da metodologia do meu TCC. O conteúdo do EcoMuseu do Boné pertence aos seus respectivos mantenedores.
 
 
 ---
 
 ## Autor
-Deivid da Silva Galvão - UTFPR (Universidade Tecnológica Federal do Paraná
+Deivid da Silva Galvão - UTFPR (Universidade Tecnológica Federal do Paraná)
 
 ---
 
